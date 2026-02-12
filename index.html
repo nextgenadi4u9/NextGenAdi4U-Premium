@@ -109,17 +109,17 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 🔥 NEW FIREBASE CONFIG (NextGen-Official)
+        // 🔥 YOUR NEW PREMIUM FIREBASE CONFIG
         const firebaseConfig = {
-            apiKey: "AIzaSyBX9u8NcYs8IZM0LzxO9v6mlqmJydKUtqE",
-            authDomain: "nextgen-official.firebaseapp.com",
-            projectId: "nextgen-official",
-            storageBucket: "nextgen-official.firebasestorage.app",
-            messagingSenderId: "44422243506",
-            appId: "1:44422243506:web:399e35d3099434a363d5ab",
-            measurementId: "G-B3L8HWDHLP"
+            apiKey: "AIzaSyBE4rNCK5MR1Joy-EOJgWgMLqmm6QDEH40",
+            authDomain: "premium-6172b.firebaseapp.com",
+            projectId: "premium-6172b",
+            storageBucket: "premium-6172b.firebasestorage.app",
+            messagingSenderId: "1024825846032",
+            appId: "1:1024825846032:web:93209b4ca94480da32dd95",
+            measurementId: "G-QGEW9H7NST"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -127,17 +127,18 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // 🚨 YOUR TELEGRAM CONFIG
+        // 🚨 YOUR TELEGRAM DETAILS
         const TG_TOKEN = "8336599171:AAFNKIKQ_3DBOLO9HHpkgFoFHXd2NO2NOAE"; 
         const TG_CHAT_ID = "8255824096"; 
 
-        // 🚀 Redirect if Logged In
-        onAuthStateChanged(auth, (user) => { if (user) window.location.replace("dashboard.html"); });
-
-        // 🎁 Capture Referral from URL (?ref=UID)
-        const urlParams = new URLSearchParams(window.location.search);
-        const refUID = urlParams.get('ref');
-        if(refUID) { sessionStorage.setItem('referredBy', refUID); }
+        // 🚀 AUTO REDIRECT LOGIC
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Ensure DB entry exists before redirecting
+                await checkAndCreateUser(user);
+                window.location.replace("dashboard.html");
+            }
+        });
 
         window.toggleView = function(view) {
             if (view === 'login') { 
@@ -153,7 +154,7 @@
             }
         }
 
-        // 📤 SEND TELEGRAM ALERT
+        // 📤 TELEGRAM NOTIFICATION
         async function sendTelegramAlert(title, details) {
             let msg = `🔔 *${title}*\n\n${details}\n\n⏰ *Time:* ${new Date().toLocaleString()}`;
             try {
@@ -164,7 +165,26 @@
             } catch (e) { console.error("TG Error:", e); }
         }
 
-        // 🚀 HANDLE REGISTER
+        // 🛠️ DATABASE CREATION (LOOP FIX)
+        async function checkAndCreateUser(user, name = null) {
+            const userRef = doc(db, "users", user.uid);
+            const snap = await getDoc(userRef);
+
+            if (!snap.exists()) {
+                const userName = name || user.displayName || "Unknown User";
+                await setDoc(userRef, {
+                    fullName: userName,
+                    email: user.email,
+                    credits: 100, // Signup Bonus
+                    planType: "Free",
+                    joinedDate: new Date().toISOString()
+                });
+                return true; // New User Created
+            }
+            return false; // Old User
+        }
+
+        // 🚀 REGISTER
         window.handleRegister = async function(e) {
             e.preventDefault();
             const btn = document.getElementById('regBtn'); btn.innerHTML = "Creating...";
@@ -175,36 +195,15 @@
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                let savedRef = sessionStorage.getItem('referredBy');
                 
-                let userData = {
-                    fullName: name, email: email,
-                    credits: 100, // 🎁 SIGNUP BONUS
-                    planType: "Free",
-                    joinedDate: new Date().toISOString()
-                };
-
-                // Referral Logic
-                if (savedRef && savedRef !== user.uid) {
-                    userData.referredBy = savedRef;
-                    try {
-                        const refDoc = doc(db, "users", savedRef);
-                        await updateDoc(refDoc, { 
-                            credits: increment(20), // 🎁 REFERRER REWARD
-                            referralLogs: arrayUnion({ user: name, date: new Date().toISOString(), bonus: 20 })
-                        });
-                    } catch(err) { console.log("Ref Error", err); }
-                }
-
-                await setDoc(doc(db, "users", user.uid), userData);
-                sendTelegramAlert("🎉 NEW USER REGISTERED", `👤 *Name:* ${name}\n📧 *Email:* ${email}\n💰 *Credits:* 100 (Bonus)\n🔗 *Referred By:* ${savedRef ? "Yes" : "No"}`);
+                // Save to DB
+                await checkAndCreateUser(user, name);
                 
-                Swal.fire({ 
-                    title: 'Welcome! 🎁', 
-                    text: 'Account created with 100 Bonus Credits!', 
-                    icon: 'success', 
-                    customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' }
-                }).then(() => window.location.replace("dashboard.html"));
+                // Notify Telegram
+                await sendTelegramAlert("🎉 NEW PREMIUM USER", `👤 *Name:* ${name}\n📧 *Email:* ${email}\n💰 *Credits:* 100 (Bonus)`);
+                
+                Swal.fire({ title: 'Welcome! 🎁', text: 'Account created!', icon: 'success', timer: 1500, showConfirmButton: false })
+                .then(() => window.location.replace("dashboard.html"));
 
             } catch (error) { 
                 Swal.fire({ title: 'Error', text: error.message, icon: 'error' });
@@ -212,13 +211,17 @@
             }
         }
 
-        // 🚀 HANDLE LOGIN
+        // 🚀 LOGIN
         window.handleLogin = async function(e) {
             e.preventDefault();
             const btn = document.getElementById('loginBtn'); btn.innerHTML = "Verifying...";
             try {
-                await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
-                sendTelegramAlert("🟢 USER LOGIN", `📧 *Email:* ${document.getElementById('loginEmail').value}`);
+                const userCredential = await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
+                
+                // Ensure DB entry exists (Loop Fix)
+                await checkAndCreateUser(userCredential.user);
+
+                await sendTelegramAlert("🟢 USER LOGIN", `📧 *Email:* ${userCredential.user.email}`);
                 window.location.replace("dashboard.html");
             } catch (error) { 
                 Swal.fire({ title: 'Login Failed', text: 'Invalid Email or Password', icon: 'error' });
@@ -226,38 +229,28 @@
             }
         }
 
-        // 🚀 HANDLE GOOGLE LOGIN
+        // 🚀 GOOGLE LOGIN
         window.handleGoogleLogin = async function() {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
-                const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+                
+                // Check if New or Old
+                const isNew = await checkAndCreateUser(user);
 
-                if (!userSnap.exists()) {
-                    // New User Logic
-                    let savedRef = sessionStorage.getItem('referredBy');
-                    let userData = {
-                        fullName: user.displayName, email: user.email,
-                        credits: 100, // 🎁 BONUS
-                        planType: "Free",
-                        joinedDate: new Date().toISOString()
-                    };
-
-                    if (savedRef && savedRef !== user.uid) {
-                        userData.referredBy = savedRef;
-                        try {
-                            const refDoc = doc(db, "users", savedRef);
-                            await updateDoc(refDoc, { credits: increment(20) });
-                        } catch(err) {}
-                    }
-                    await setDoc(userRef, userData);
-                    sendTelegramAlert("🎉 NEW GOOGLE USER", `👤 *Name:* ${user.displayName}\n📧 *Email:* ${user.email}\n💰 *Credits:* 100`);
+                if (isNew) {
+                    await sendTelegramAlert("🎉 NEW GOOGLE USER", `👤 *Name:* ${user.displayName}\n📧 *Email:* ${user.email}\n💰 *Credits:* 100`);
                 } else {
-                    sendTelegramAlert("🟢 GOOGLE LOGIN", `👤 *Name:* ${user.displayName}`);
+                    await sendTelegramAlert("🟢 GOOGLE LOGIN", `👤 *Name:* ${user.displayName}`);
                 }
+                
                 window.location.replace("dashboard.html");
-            } catch (error) { Swal.fire('Error', 'Google Login Cancelled', 'error'); }
+            } catch (error) { 
+                console.error(error);
+                let msg = error.message;
+                if(msg.includes("unauthorized-domain")) msg = "Please Add Vercel Domain in Firebase Settings!";
+                Swal.fire('Error', msg, 'error'); 
+            }
         }
     </script>
 </body>
