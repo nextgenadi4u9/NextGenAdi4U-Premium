@@ -31,7 +31,23 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background 0.3s, color 0.3s; }
         
-        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
+        body { background-color: var(--bg-body); color: var(--text-main); overflow-x: hidden; min-height: 100vh; display: flex; flex-direction: column;}
+
+        /* ✨ GLOWING LOGO ANIMATION */
+        @keyframes shine {
+            0% { background-position: -200%; }
+            100% { background-position: 200%; }
+        }
+        .nav-logo { 
+            font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 800; text-decoration: none; 
+            background: linear-gradient(90deg, var(--dark) 0%, var(--gold) 50%, var(--dark) 100%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
+        }
+        body.dark-mode .nav-logo {
+            background: linear-gradient(90deg, #fff 0%, var(--gold) 50%, #fff 100%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
         /* 🌟 NAVBAR */
         .navbar { 
@@ -39,9 +55,6 @@
             border-bottom: 1px solid var(--border-color); padding: 15px 5%; 
             display: flex; justify-content: space-between; align-items: center; 
         }
-        
-        .nav-logo { font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 800; color: var(--dark); text-decoration: none; }
-        .nav-logo span { color: var(--gold); }
         
         .nav-actions { display: flex; align-items: center; gap: 20px; }
 
@@ -78,7 +91,7 @@
         }
 
         /* 🌟 ASSETS GRID */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 80px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 80px; flex-grow: 1; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
         
         .card { 
@@ -103,19 +116,24 @@
         .btn-card:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
 
         /* 🌟 FOOTER */
-        footer { border-top: 1px solid var(--border-color); padding: 40px 20px; text-align: center; background: var(--bg-nav); margin-top: 50px; }
-        footer p { color: var(--text-muted); font-size: 0.9rem; }
+        footer { border-top: 1px solid var(--border-color); padding: 40px 20px; text-align: center; background: var(--bg-nav); margin-top: auto; }
+        footer h2 { font-family: 'Cinzel', serif; color: var(--text-main); margin-bottom: 10px; font-size: 1.5rem; }
+        footer span { color: var(--gold); }
+        .footer-links { margin: 20px 0; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .footer-links a:hover { color: var(--gold); }
+        footer p { color: var(--text-muted); font-size: 0.8rem; opacity: 0.7; }
 
         /* 🌟 MODALS */
         .modal-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); 
             backdrop-filter: blur(5px); z-index: 1000; display: flex; justify-content: center; align-items: center; 
             opacity: 0; visibility: hidden; transition: 0.3s; 
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         
         .modal-content { 
-            background: var(--bg-card); width: 90%; max-width: 450px; padding: 30px; border-radius: 20px; 
+            background: var(--bg-card); width: 90%; max-width: 480px; padding: 30px; border-radius: 20px; 
             border: 1px solid var(--gold); box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative;
         }
         .close-modal { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
@@ -128,6 +146,12 @@
             width: 100%; padding: 12px; background: var(--dark); color: var(--gold); border: none; 
             border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; 
         }
+
+        /* REFERRAL INFO BOX */
+        .ref-info { background: rgba(212,175,55,0.1); border-left: 3px solid var(--gold); padding: 15px; margin: 15px 0; border-radius: 5px; text-align: left; }
+        .ref-info h4 { color: var(--gold); margin-bottom: 5px; font-size: 0.95rem; }
+        .ref-info ul { padding-left: 20px; color: var(--text-main); font-size: 0.85rem; }
+        .ref-info li { margin-bottom: 5px; }
 
         /* LOGS */
         .logs-box { max-height: 200px; overflow-y: auto; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 10px; }
@@ -145,7 +169,7 @@
     <div id="loader"><div class="spinner"></div></div>
 
     <nav class="navbar">
-        <a href="#" class="nav-logo">NextGen<span>Adi4U</span></a>
+        <a href="#" class="nav-logo">NextGenAdi4U</a>
         
         <div class="nav-actions">
             <div class="credit-badge" onclick="window.location.href='pricing.html'">
@@ -163,6 +187,7 @@
             <a class="dropdown-item" onclick="openModal('referModal')"><i class="fas fa-users"></i> Refer & Earn</a>
             <a class="dropdown-item" href="pricing.html"><i class="fas fa-shopping-cart"></i> Buy Credits</a>
             <a class="dropdown-item" onclick="toggleTheme()"><i class="fas fa-moon"></i> Toggle Theme</a>
+            <a class="dropdown-item" onclick="openModal('settingsModal')"><i class="fas fa-cog"></i> Settings</a>
             <div style="height:1px; background:var(--border-color); margin:8px 0;"></div>
             <a class="dropdown-item" onclick="logout()" style="color:#EF4444;"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
@@ -216,6 +241,13 @@
     </div>
 
     <footer>
+        <h2>NextGen<span>Adi4U</span></h2>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support</a>
+            <a href="#">Telegram Channel</a>
+        </div>
         <p>&copy; 2026 NextGenAdi4U. All Rights Reserved.</p>
     </footer>
 
@@ -234,13 +266,35 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('settingsModal')">&times;</button>
+            <h2 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px;">Security Settings</h2>
+            <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Update your email or set a new password.</p>
+            
+            <label style="font-size:0.8rem; color:var(--gold);">Update Email</label>
+            <input type="email" id="settingEmail" class="lux-input" placeholder="New Email Address">
+            
+            <label style="font-size:0.8rem; color:var(--gold);">Set / Change Password</label>
+            <input type="password" id="settingPass" class="lux-input" placeholder="New Password (Min 6 chars)">
+            
+            <button class="btn-modal" onclick="updateSecurity()">Update Credentials</button>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="referModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal('referModal')">&times;</button>
             <h2 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px;">Refer & Earn</h2>
-            <p style="text-align:center; font-size:0.9rem; color:var(--text-muted); margin-bottom:15px;">
-                Share link & earn <b>20 Credits</b> per signup + <br><b>20% Commission</b> on their purchases!
-            </p>
+            
+            <div class="ref-info">
+                <h4><i class="fas fa-info-circle"></i> How it works:</h4>
+                <ul>
+                    <li><b>Invite Friend:</b> They get 100 Bonus Credits.</li>
+                    <li><b>You Earn:</b> 20 Credits Instantly.</li>
+                    <li><b>Commission:</b> Earn 20% on their Credit purchases & 10% on Memberships (Lifetime).</li>
+                </ul>
+            </div>
             
             <input type="text" id="refLink" class="lux-input" readonly style="text-align:center; font-weight:bold; color:var(--gold);">
             <button class="btn-modal" onclick="copyRef()">Copy Link</button>
@@ -253,7 +307,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut, updateEmail, updatePassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // 🔥 FIREBASE CONFIG
@@ -300,6 +354,7 @@
             document.getElementById('heroName').innerText = name;
             document.getElementById('menuName').innerText = name;
             document.getElementById('editName').value = name;
+            document.getElementById('settingEmail').value = user.email; // Pre-fill email
             document.getElementById('heroPlanBadge').innerText = (data.planType || "Free") + " Plan";
             document.getElementById('menuPlan').innerText = (data.planType || "Free") + " Plan";
 
@@ -331,6 +386,33 @@
             }
         }
 
+        // --- SECURITY FUNCTIONS (NEW) ---
+        window.updateSecurity = async () => {
+            const newEmail = document.getElementById('settingEmail').value;
+            const newPass = document.getElementById('settingPass').value;
+            const user = auth.currentUser;
+
+            if(!newEmail && !newPass) return Swal.fire('Error', 'Please enter email or password to update.', 'error');
+
+            try {
+                if(newPass && newPass.length >= 6) {
+                    await updatePassword(user, newPass);
+                    Swal.fire('Success', 'Password updated successfully!', 'success');
+                }
+                if(newEmail && newEmail !== user.email) {
+                    await updateEmail(user, newEmail);
+                    await updateDoc(doc(db, "users", user.uid), { email: newEmail });
+                    Swal.fire('Success', 'Email updated! Please login again.', 'success').then(() => window.logout());
+                }
+            } catch (error) {
+                if(error.code === 'auth/requires-recent-login') {
+                    Swal.fire('Security Check', 'Please Logout and Login again to change sensitive settings.', 'warning');
+                } else {
+                    Swal.fire('Error', error.message, 'error');
+                }
+            }
+        };
+
         // --- UI FUNCTIONS ---
         window.toggleMenu = () => document.getElementById('userMenu').classList.toggle('active');
         window.openModal = (id) => { document.getElementById(id).classList.add('active'); document.getElementById('userMenu').classList.remove('active'); };
@@ -340,7 +422,6 @@
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         };
-        // Check saved theme
         if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
 
         window.copyRef = () => {
@@ -360,7 +441,7 @@
 
         window.uploadPic = (e) => {
             const file = e.target.files[0];
-            if(file && file.size < 1048576) { // 1MB
+            if(file && file.size < 1048576) { 
                 const reader = new FileReader();
                 reader.onloadend = async () => {
                     await updateDoc(doc(db, "users", auth.currentUser.uid), { profilePicBase64: reader.result });
