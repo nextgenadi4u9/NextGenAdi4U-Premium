@@ -31,7 +31,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
         
-        /* 🛠️ FIX: Removed 'display: none' to prevent white screen */
+        /* 🛠️ FIX: No display:none here */
         body { background-color: var(--bg-body); color: var(--text-main); background-image: radial-gradient(var(--border-color) 1px, transparent 1px); background-size: 30px 30px; overflow-x: hidden; }
 
         /* 🌟 NAVBAR 🌟 */
@@ -258,15 +258,15 @@
         import { getAuth, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 🔥 NEW FIREBASE CONFIG
+        // 🔥 NEW FIREBASE CONFIG (NextGen-Official)
         const firebaseConfig = {
-            apiKey: "AIzaSyDc724R0nJCMZVapg0aXJVNK-IR6480qjY",
-            authDomain: "nextgenadi4u-42dfd.firebaseapp.com",
-            projectId: "nextgenadi4u-42dfd",
-            storageBucket: "nextgenadi4u-42dfd.firebasestorage.app",
-            messagingSenderId: "322775356675",
-            appId: "1:322775356675:web:cb0e1a5fb9535d88818536",
-            measurementId: "G-GL9RBRCBB4"
+            apiKey: "AIzaSyBX9u8NcYs8IZM0LzxO9v6mlqmJydKUtqE",
+            authDomain: "nextgen-official.firebaseapp.com",
+            projectId: "nextgen-official",
+            storageBucket: "nextgen-official.firebasestorage.app",
+            messagingSenderId: "44422243506",
+            appId: "1:44422243506:web:399e35d3099434a363d5ab",
+            measurementId: "G-B3L8HWDHLP"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -278,7 +278,7 @@
             iconColor: '#D4AF37', customClass: { popup: 'luxury-toast' }
         });
 
-        // 🚀 LOOP FIX: Wait for auth to resolve
+        // 🚀 AUTH LISTENER
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 // User is Logged In
