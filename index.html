@@ -12,60 +12,171 @@
     <style> 
         body { -webkit-user-select: none; user-select: none; } 
         :root { 
-            --gold: #D4AF37; --dark: #0A0A0A; --gray-light: #F4F4F5; --text-muted: #71717A;
+            --gold: #D4AF37; --gold-dark: #B8860B; --dark: #050505; --card-bg: rgba(20, 20, 20, 0.95);
+            --text-main: #FFFFFF; --text-muted: #A1A1AA; --border: #333;
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         
         body { 
             min-height: 100vh; display: flex; justify-content: center; align-items: center; 
-            background-color: #FAFAFA; background-image: radial-gradient(#E4E4E7 1px, transparent 1px); 
-            background-size: 30px 30px; 
+            background-color: var(--dark); overflow: hidden; position: relative;
         }
 
+        /* ✨ GLOWING ANIMATION */
+        .ambient-glow {
+            position: absolute; width: 120%; height: 120%;
+            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15), transparent 60%);
+            animation: pulseGlow 8s infinite alternate; z-index: 1; pointer-events: none;
+        }
+        @keyframes pulseGlow { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 0.5; } }
+        
+        .particles {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 40px 40px; opacity: 0.3; z-index: 1;
+        }
+
+        /* 🏰 LUXURY CARD */
         .auth-card {
-            width: 100%; max-width: 400px; background: #FFFFFF;
-            padding: 40px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            text-align: center; border: 1px solid #eee;
+            position: relative; z-index: 10; width: 100%; max-width: 420px; 
+            background: var(--card-bg); border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 40px; border-radius: 20px; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 15px rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(20px); animation: slideUp 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        .brand-header h1 { font-family: 'Cinzel', serif; font-size: 2rem; color: var(--dark); margin-bottom: 5px; }
-        .brand-header span { color: var(--gold); }
-        .brand-header p { color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 30px; }
+        .brand-header { text-align: center; margin-bottom: 30px; }
+        .brand-header h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 5px; letter-spacing: 1px; }
+        .brand-header span { color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.5); }
+        .brand-header p { color: var(--text-muted); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; }
 
+        /* TOGGLE BUTTONS */
+        .toggle-container { 
+            display: flex; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 5px; margin-bottom: 25px; 
+            border: 1px solid var(--border);
+        }
+        .toggle-btn { 
+            flex: 1; padding: 10px; border: none; background: transparent; 
+            font-size: 0.9rem; font-weight: 600; color: var(--text-muted); cursor: pointer; 
+            border-radius: 8px; transition: all 0.3s ease; 
+        }
+        .toggle-btn.active { background: var(--gold); color: #000; box-shadow: 0 4px 15px rgba(212,175,55,0.3); }
+
+        /* FORMS */
+        .form-area { display: none; animation: fadeIn 0.4s ease; }
+        .form-area.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group i { position: absolute; left: 15px; top: 40px; color: var(--gold); font-size: 0.9rem; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; margin-left: 5px; }
+        
+        .lux-input { 
+            width: 100%; padding: 12px 12px 12px 40px; 
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); 
+            border-radius: 10px; font-size: 0.95rem; color: #fff; outline: none; transition: 0.3s; 
+        }
+        .lux-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1); background: rgba(255,255,255,0.05); }
+
+        .btn-primary { 
+            width: 100%; padding: 14px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
+            color: #000; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; 
+            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; 
+            margin-top: 10px; box-shadow: 0 5px 15px rgba(212,175,55,0.2);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(212,175,55,0.3); }
+
+        .forgot-pass { text-align: right; margin-bottom: 20px; }
+        .forgot-pass a { color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: 0.3s; cursor: pointer; }
+        .forgot-pass a:hover { color: var(--gold); text-decoration: underline; }
+
+        .divider { display: flex; align-items: center; text-align: center; margin: 25px 0; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
+        .divider::before { margin-right: 15px; } .divider::after { margin-left: 15px; }
+        
         .social-btn { 
-            width: 100%; padding: 14px; background: #fff; border: 1px solid #ddd; 
-            border-radius: 8px; font-weight: 600; cursor: pointer; 
-            display: flex; justify-content: center; align-items: center; gap: 10px; 
+            width: 100%; padding: 12px; background: #fff; border: none; border-radius: 10px; 
+            font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; 
             transition: 0.3s; color: #333;
         }
-        .social-btn:hover { background: #f9f9f9; border-color: #bbb; transform: translateY(-2px); }
-        
-        .footer-text { margin-top: 20px; font-size: 0.8rem; color: #999; }
+        .social-btn:hover { background: #f0f0f0; transform: translateY(-2px); }
+
+        /* SWEETALERT CUSTOM */
+        .luxury-popup { background: #1a1a1a !important; border: 1px solid var(--gold) !important; color: #fff !important; }
+        .luxury-title { color: var(--gold) !important; font-family: 'Cinzel' !important; }
+        .luxury-input { background: #333 !important; color: #fff !important; border: 1px solid #555 !important; }
     </style>
 </head>
 <body>
 
+    <div class="ambient-glow"></div>
+    <div class="particles"></div>
+
     <div class="auth-card">
         <div class="brand-header">
             <h1>NextGen<span>Adi4U</span></h1>
-            <p>Premium Digital Vault</p>
+            <p>Premium Digital Vault Access</p>
         </div>
 
-        <button class="social-btn" onclick="handleGoogleLogin()">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="22"> Sign in with Google
-        </button>
-        
-        <div class="footer-text">
-            Secure Access • Instant Setup • Premium Assets
+        <div class="toggle-container">
+            <button class="toggle-btn active" id="btn-login" onclick="toggleView('login')">Login</button>
+            <button class="toggle-btn" id="btn-register" onclick="toggleView('register')">Sign Up</button>
         </div>
+
+        <div class="form-area active" id="login-section">
+            <form onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" class="lux-input" placeholder="Enter your email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" class="lux-input" placeholder="Enter password" required>
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="forgot-pass">
+                    <a onclick="forgotPassword()">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn-primary" id="loginBtn"><span>Unlock Vault</span> <i class="fas fa-arrow-right"></i></button>
+            </form>
+        </div>
+
+        <div class="form-area" id="register-section">
+            <form onsubmit="handleRegister(event)">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" class="lux-input" placeholder="Your Name" required>
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="regEmail" class="lux-input" placeholder="Email" required>
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="input-group">
+                    <label>Create Password</label>
+                    <input type="password" id="regPassword" class="lux-input" placeholder="Password (Min 6 chars)" required minlength="6">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button type="submit" class="btn-primary" id="regBtn"><span>Create Account</span> <i class="fas fa-user-plus"></i></button>
+            </form>
+        </div>
+
+        <div class="divider">Or Access With</div>
+        <button class="social-btn" onclick="handleGoogleLogin()">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20"> Google Secure Login
+        </button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 🔥 FINAL PREMIUM CONFIG
+        // 🔥 FIREBASE CONFIG (Final)
         const firebaseConfig = {
             apiKey: "AIzaSyBE4rNCK5MR1Joy-EOJgWgMLqmm6QDEH40",
             authDomain: "premium-6172b.firebaseapp.com",
@@ -79,95 +190,167 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+        const googleProvider = new GoogleAuthProvider();
 
-        // 🚨 TELEGRAM SETUP
+        // 🚨 YOUR TELEGRAM BOT DETAILS
         const TG_TOKEN = "8336599171:AAFNKIKQ_3DBOLO9HHpkgFoFHXd2NO2NOAE"; 
         const TG_CHAT_ID = "8255824096"; 
 
-        // 🎁 REFERRAL CAPTURE (URL मधून ID पकडणे)
+        // 🚀 CAPTURE REFERRAL (URL)
         const urlParams = new URLSearchParams(window.location.search);
         const refID = urlParams.get('ref');
         if(refID) { sessionStorage.setItem('referredBy', refID); }
 
-        // 🚀 AUTO REDIRECT (LOOP FIX)
+        // 🔄 AUTO REDIRECT (NO SPAM ALERT HERE)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                // We do NOT send Telegram alert here to prevent spam on refresh
                 await checkAndCreateUser(user);
                 window.location.replace("dashboard.html");
             }
         });
 
-        window.handleGoogleLogin = async function() {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const isNewUser = await checkAndCreateUser(result.user);
-                
-                if (isNewUser) {
-                    await sendTelegramAlert("🎉 NEW USER SIGNUP", `👤 Name: ${result.user.displayName}\n📧 Email: ${result.user.email}\n🎁 Bonus: 100 Credits`);
-                } else {
-                    await sendTelegramAlert("🟢 USER LOGIN", `👤 Name: ${result.user.displayName}`);
-                }
-
-                window.location.replace("dashboard.html");
-            } catch (error) {
-                console.error(error);
-                let msg = error.message;
-                if(msg.includes("unauthorized-domain")) msg = "Please Add Vercel Domain in Firebase Settings!";
-                Swal.fire({ title: 'Login Error', text: msg, icon: 'error' });
+        window.toggleView = function(view) {
+            if (view === 'login') { 
+                document.getElementById('register-section').classList.remove('active'); 
+                document.getElementById('login-section').classList.add('active'); 
+                document.getElementById('btn-register').classList.remove('active'); 
+                document.getElementById('btn-login').classList.add('active'); 
+            } else { 
+                document.getElementById('login-section').classList.remove('active'); 
+                document.getElementById('register-section').classList.add('active'); 
+                document.getElementById('btn-login').classList.remove('active'); 
+                document.getElementById('btn-register').classList.add('active'); 
             }
         }
 
-        // 🛠️ CREATE USER + REFERRAL LOGIC
-        async function checkAndCreateUser(user) {
+        // 📧 REGISTER HANDLER
+        window.handleRegister = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('regBtn'); btn.innerHTML = "Creating...";
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await checkAndCreateUser(userCredential.user, name);
+                
+                // 🔔 SEND ALERT (Signup)
+                await sendTelegramLog(userCredential.user, "🎉 NEW SIGNUP", name);
+                
+                Swal.fire({ title: 'Welcome!', text: 'Account created successfully!', icon: 'success', customClass: { popup: 'luxury-popup', title: 'luxury-title' } });
+            } catch (error) { 
+                Swal.fire({ title: 'Error', text: error.message, icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title' } });
+                btn.innerHTML = '<span>Create Account</span> <i class="fas fa-user-plus"></i>';
+            }
+        }
+
+        // 🔐 LOGIN HANDLER
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn'); btn.innerHTML = "Verifying...";
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
+                await checkAndCreateUser(userCredential.user);
+                
+                // 🔔 SEND ALERT (Login)
+                await sendTelegramLog(userCredential.user, "🟢 EMAIL LOGIN");
+
+            } catch (error) { 
+                Swal.fire({ title: 'Login Failed', text: 'Invalid Email or Password', icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title' } });
+                btn.innerHTML = '<span>Unlock Vault</span> <i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        // 🌐 GOOGLE LOGIN HANDLER
+        window.handleGoogleLogin = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                await checkAndCreateUser(result.user);
+                
+                // 🔔 SEND ALERT (Google Login + Photo)
+                await sendTelegramLog(result.user, "🟢 GOOGLE LOGIN");
+
+            } catch (error) { 
+                let msg = error.message;
+                if(msg.includes("unauthorized-domain")) msg = "Please Add Vercel Domain in Firebase Settings!";
+                Swal.fire({ title: 'Error', text: msg, icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title' } });
+            }
+        }
+
+        // ❓ FORGOT PASSWORD
+        window.forgotPassword = async function() {
+            const { value: email } = await Swal.fire({
+                title: 'Reset Password',
+                input: 'email',
+                inputLabel: 'Enter your email address',
+                inputPlaceholder: 'name@example.com',
+                showCancelButton: true,
+                customClass: { popup: 'luxury-popup', title: 'luxury-title', input: 'luxury-input' }
+            });
+
+            if (email) {
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    Swal.fire({ title: 'Sent!', text: 'Check your email for reset link.', icon: 'success', customClass: { popup: 'luxury-popup', title: 'luxury-title' } });
+                } catch (e) {
+                    Swal.fire({ title: 'Error', text: e.message, icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title' } });
+                }
+            }
+        }
+
+        // 🛠️ DATABASE & REFERRAL HANDLER
+        async function checkAndCreateUser(user, name = null) {
             const userRef = doc(db, "users", user.uid);
             const snap = await getDoc(userRef);
 
             if (!snap.exists()) {
-                // 1. New User Data
                 let userData = {
-                    fullName: user.displayName,
+                    fullName: name || user.displayName || "User",
                     email: user.email,
-                    credits: 100, // 🎁 Signup Bonus (Fixed)
+                    credits: 100, // 🎁 Bonus
                     planType: "Free",
                     joinedDate: new Date().toISOString()
                 };
 
-                // 2. Check for Referrer
                 const referrerID = sessionStorage.getItem('referredBy');
                 if (referrerID && referrerID !== user.uid) {
-                    userData.referredBy = referrerID; // Link Save करणे (फ्युचर कमिशनसाठी)
-                    
-                    // 3. Give Reward to Referrer (20 Credits)
+                    userData.referredBy = referrerID;
                     try {
-                        const refRef = doc(db, "users", referrerID);
-                        await updateDoc(refRef, {
-                            credits: increment(20),
-                            referralLogs: arrayUnion({
-                                type: 'signup',
-                                user: user.displayName,
-                                bonus: 20,
-                                date: new Date().toISOString()
-                            })
+                        await updateDoc(doc(db, "users", referrerID), {
+                            credits: increment(20), // 🎁 Ref Bonus
+                            referralLogs: arrayUnion({ type: 'signup', user: userData.fullName, bonus: 20, date: new Date().toISOString() })
                         });
-                        // Optional: Notify Referrer via Telegram logic can go here
-                    } catch (err) { console.log("Referral Error:", err); }
+                    } catch (e) {}
                 }
-
                 await setDoc(userRef, userData);
-                return true; // True = New User Created
             }
-            return false; // False = Old User
         }
 
-        async function sendTelegramAlert(title, details) {
-            let msg = `🔔 *${title}*\n\n${details}`;
+        // 📢 TELEGRAM ALERT (ANTI-SPAM & PHOTO SUPPORT)
+        async function sendTelegramLog(user, type, manualName = null) {
+            const displayName = manualName || user.displayName || "User";
+            const email = user.email;
+            const photo = user.photoURL;
+            
+            const text = `🔔 *${type}*\n\n👤 *Name:* ${displayName}\n📧 *Email:* ${email}\n⏰ *Time:* ${new Date().toLocaleString()}`;
+
             try {
-                await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: "Markdown" })
-                });
-            } catch (e) {}
+                if (photo) {
+                    // Send Photo if available (Google)
+                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: TG_CHAT_ID, photo: photo, caption: text, parse_mode: "Markdown" })
+                    });
+                } else {
+                    // Send Text only (Email/Pass)
+                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: "Markdown" })
+                    });
+                }
+            } catch (e) { console.error("TG Error", e); }
         }
     </script>
 </body>
