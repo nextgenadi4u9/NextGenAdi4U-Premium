@@ -105,7 +105,7 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <h3 style="font-family: 'Cinzel'; color: #333;">Loading Store...</h3>
+        <h3 style="font-family: 'Cinzel'; color: #333;">Loading Test Store...</h3>
     </div>
 
     <div class="ambient-glow"></div>
@@ -120,7 +120,7 @@
 
     <div class="header-section">
         <h1 class="title">Test Store (Free)</h1>
-        <p class="subtitle">Testing Mode: All payments are bypassed.</p>
+        <p class="subtitle">Testing Mode: All payments are bypassed for checking logic.</p>
     </div>
 
     <div class="toggle-container">
@@ -186,28 +186,27 @@
 
     </div>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, updateDoc, getDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // 🔥 NEW FIREBASE CONFIG (NextGen-Official)
         const firebaseConfig = {
-            apiKey: "AIzaSyDc724R0nJCMZVapg0aXJVNK-IR6480qjY",
-            authDomain: "nextgenadi4u-42dfd.firebaseapp.com",
-            projectId: "nextgenadi4u-42dfd",
-            storageBucket: "nextgenadi4u-42dfd.firebasestorage.app",
-            messagingSenderId: "322775356675",
-            appId: "1:322775356675:web:cb0e1a5fb9535d88818536",
-            measurementId: "G-GL9RBRCBB4"
+            apiKey: "AIzaSyBX9u8NcYs8IZM0LzxO9v6mlqmJydKUtqE",
+            authDomain: "nextgen-official.firebaseapp.com",
+            projectId: "nextgen-official",
+            storageBucket: "nextgen-official.firebasestorage.app",
+            messagingSenderId: "44422243506",
+            appId: "1:44422243506:web:399e35d3099434a363d5ab",
+            measurementId: "G-B3L8HWDHLP"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // 🚨 TELEGRAM CONFIG
+        // 🚨 YOUR TELEGRAM CONFIG
         const TG_TOKEN = "8336599171:AAFNKIKQ_3DBOLO9HHpkgFoFHXd2NO2NOAE"; 
         const TG_CHAT_ID = "8255824096"; 
 
