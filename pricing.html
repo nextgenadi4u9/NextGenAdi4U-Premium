@@ -3,344 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Store | NextGenAdi4U</title>
+    <title>Store (Test Mode) | NextGenAdi4U</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <style> body { -webkit-user-select: none; -ms-user-select: none; user-select: none; } </style>
-    <script>
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) return false; }
-    </script>
-
+    <style> body { -webkit-user-select: none; user-select: none; } </style>
+    
     <style>
         :root { 
-            --gold: #D4AF37; --gold-light: #FBF6E5; --dark: #0A0A0A;
-            --gray-light: #F4F4F5; --gray-border: #E4E4E7; --text-main: #18181B; --text-muted: #71717A;
-            --bg-body: #FAFAFA; --bg-card: #FFFFFF;
+            --gold: #D4AF37; --dark: #0A0A0A; --bg: #FAFAFA; --text: #18181B; 
         }
-        
-        body.dark-mode {
-            --bg-body: #09090B; --bg-card: #18181B; --text-main: #F4F4F5; --text-muted: #A1A1AA; --gray-border: #27272A;
+        body { 
+            font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background 0.3s, color 0.3s; }
+        /* HEADER */
+        .header { width: 100%; max-width: 1000px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .back-btn { text-decoration: none; color: var(--text); font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: #fff; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+        .back-btn:hover { color: var(--gold); transform: translateX(-5px); }
+        .wallet-badge { background: var(--dark); color: var(--gold); padding: 8px 15px; border-radius: 50px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+
+        /* TITLES */
+        h1 { font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 5px; color: var(--dark); }
+        p.subtitle { color: #777; margin-bottom: 30px; }
+        .test-banner { background: #ffeba7; color: #8a6d3b; padding: 10px 20px; border-radius: 8px; font-weight: bold; margin-bottom: 20px; border: 1px solid #ffd56d; }
+
+        /* PRICING CARDS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1000px; width: 100%; }
+        .card { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; transition: 0.3s; position: relative; overflow: hidden; }
+        .card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15); }
         
-        body { 
-            min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
-            background-color: var(--bg-body); background-image: radial-gradient(var(--gray-border) 1px, transparent 1px); background-size: 30px 30px; 
-            position: relative; padding: 80px 20px 80px; overflow-x: hidden;
-        }
+        .card.popular { border: 2px solid var(--gold); }
+        .badge { position: absolute; top: 15px; right: -30px; background: var(--gold); color: #fff; padding: 5px 40px; transform: rotate(45deg); font-size: 0.75rem; font-weight: bold; }
+
+        .icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 15px; }
+        .plan-name { font-size: 1.4rem; font-weight: 800; margin-bottom: 10px; }
+        .price { font-size: 2rem; font-family: 'Cinzel'; font-weight: 700; color: var(--dark); }
+        .old-price { text-decoration: line-through; color: #aaa; font-size: 1rem; }
+
+        .btn-buy { width: 100%; padding: 14px; background: var(--dark); color: var(--gold); border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn-buy:hover { background: var(--gold); color: var(--dark); }
 
         /* LOADER */
-        #loader { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--bg-body); display: flex; justify-content: center; align-items: center; 
-            z-index: 9999; flex-direction: column; 
-        }
-        .spinner { border: 4px solid rgba(212,175,55,0.2); border-top: 4px solid var(--gold); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: flex; justify-content: center; align-items: center; z-index: 999; display: none; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #ddd; border-top: 4px solid var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .ambient-glow { position: absolute; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, rgba(255,255,255,0) 70%); top: 30%; left: 50%; transform: translate(-50%, -50%); z-index: 1; pointer-events: none; }
-
-        .top-bar { position: absolute; top: 20px; left: 30px; right: 30px; display: flex; justify-content: space-between; align-items: center; z-index: 100;}
-        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 600; text-decoration: none; background: var(--bg-card); padding: 8px 18px; border-radius: 50px; border: 1px solid var(--gray-border); box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; }
-        .back-btn:hover { color: var(--gold); border-color: var(--gold); transform: translateX(-5px); }
-        
-        .user-profile { background: var(--bg-card); padding: 8px 20px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--gray-border); display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        .user-profile:hover { border-color: var(--gold); }
-        .user-profile i { font-size: 18px; color: var(--gold); }
-        .user-profile span { color: var(--text-main); font-size: 0.9rem; font-weight: 700; }
-
-        .header-section { text-align: center; position: relative; z-index: 10; margin-bottom: 30px; width: 100%; max-width: 800px; margin-top: 40px; }
-        .title { font-family: 'Cinzel', serif; font-size: 2.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; letter-spacing: -0.5px; }
-        .subtitle { color: var(--text-muted); font-size: 1.05rem; font-weight: 400; }
-
-        .toggle-container { display: flex; background: var(--gray-border); border-radius: 12px; padding: 5px; margin-bottom: 40px; position: relative; z-index: 10; width: 100%; max-width: 400px; }
-        .toggle-btn { flex: 1; padding: 12px 20px; text-align: center; border: none; background: transparent; font-size: 0.95rem; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .toggle-btn.active { background: var(--bg-card); color: var(--text-main); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .toggle-btn i { font-size: 1.1rem; }
-
-        .pricing-section { display: none; width: 100%; max-width: 1100px; z-index: 10; animation: fadeIn 0.4s ease forwards; }
-        .pricing-section.active { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        .pricing-card { background: var(--bg-card); border: 1px solid var(--gray-border); border-radius: 16px; padding: 40px 30px; width: 100%; max-width: 320px; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.05); transition: 0.4s ease; display: flex; flex-direction: column; text-align: center; position: relative; }
-        .pricing-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px -15px rgba(212,175,55,0.15); border-color: rgba(212,175,55,0.3); }
-
-        .card-ultimate { border: 2px solid var(--gold); box-shadow: 0 25px 50px -12px rgba(212,175,55,0.15); }
-        .ultimate-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--dark); color: var(--gold); padding: 6px 20px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; }
-
-        .credit-icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 15px; }
-        .plan-name { font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; }
-        
-        .price-box { margin: 20px 0; }
-        .old-price { text-decoration: line-through; color: var(--text-muted); font-size: 1.1rem; font-weight: 600; display: none; margin-right: 10px; }
-        .price { font-family: 'Cinzel', serif; font-size: 2.5rem; font-weight: 800; color: var(--gold); display: inline-block; }
-        
-        .features { list-style: none; margin-bottom: 30px; flex-grow: 1; text-align: left;}
-        .features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--text-main); margin-bottom: 14px; line-height: 1.4; font-weight: 500;}
-        .features li i { color: var(--gold); font-size: 1.1rem; margin-top: 2px; }
-
-        .buy-btn { width: 100%; padding: 15px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; border: none; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-normal { background: var(--dark); color: var(--gold); }
-        .btn-normal:hover { background: var(--gold); color: var(--dark); box-shadow: 0 10px 20px rgba(212,175,55,0.2); transform: translateY(-2px); }
-
-        @media (max-width: 768px) {
-            body { padding-top: 100px; }
-            .top-bar { flex-direction: column; gap: 15px; }
-            .title { font-size: 2.2rem; }
-            .pricing-section.active { flex-direction: column; align-items: center; gap: 35px; }
-            .pricing-card { max-width: 100%; padding: 30px 25px; }
-        }
-
-        .luxury-popup { border-radius: 20px !important; padding: 2.5rem 2rem !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15) !important; border: 1px solid var(--gray-border) !important; background: var(--bg-card) !important; }
-        .luxury-title { font-family: 'Cinzel', serif !important; color: var(--text-main) !important; font-size: 1.8rem !important; font-weight: 800 !important; }
-        .luxury-toast { border-radius: 12px !important; border: 1px solid var(--gray-border) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important; font-family: 'Inter', sans-serif !important; font-weight: 600 !important; padding: 12px 20px !important; background: var(--bg-card) !important; color: var(--text-main) !important; }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <h3 style="font-family: 'Cinzel'; color: #333;">Loading Test Store...</h3>
+    <div id="loader"><div class="spinner"></div></div>
+
+    <div class="header">
+        <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Dashboard</a>
+        <div class="wallet-badge"><i class="fas fa-coins"></i> <span id="currentCredits">...</span></div>
     </div>
 
-    <div class="ambient-glow"></div>
+    <h1>Add Credits</h1>
+    <div class="test-banner"><i class="fas fa-flask"></i> <b>TEST MODE ACTIVE:</b> No money will be deducted.</div>
+    <p class="subtitle">Select a package to instantly add credits to your vault.</p>
 
-    <div class="top-bar">
-        <a href="dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Vault</a>
-        <div class="user-profile" id="userBadge" style="display: none;">
-            <i class="fas fa-coins"></i>
-            <span id="userCreditsDisplay">Loading...</span>
-        </div>
-    </div>
-
-    <div class="header-section">
-        <h1 class="title">Test Store (Free)</h1>
-        <p class="subtitle">Testing Mode: All payments are bypassed for checking logic.</p>
-    </div>
-
-    <div class="toggle-container">
-        <button class="toggle-btn active" id="btn-credits" onclick="switchView('credits')"><i class="fas fa-coins"></i> Credit Packs</button>
-        <button class="toggle-btn" id="btn-memberships" onclick="switchView('memberships')"><i class="fas fa-crown"></i> VIP Memberships</button>
-    </div>
-
-    <div class="pricing-section active" id="credits-section">
-        
-        <div class="pricing-card">
-            <div class="credit-icon"><i class="fas fa-coins"></i></div>
-            <div class="plan-name">500 Credits</div>
-            <p style="color: var(--text-muted); font-size: 0.85rem;">Test Pack</p>
-            <div class="price-box"><div class="price">₹0</div></div>
-            <button class="buy-btn btn-normal" onclick="buyPackage('500 Credits', 500, 0, false)">Test Buy</button>
+    <div class="grid">
+        <div class="card">
+            <div class="icon"><i class="fas fa-coins"></i></div>
+            <div class="plan-name">Starter Pack</div>
+            <div><span class="old-price">₹199</span> <span class="price">₹0</span></div>
+            <p style="color:#777; font-size:0.9rem;">+500 Credits</p>
+            <button class="btn-buy" onclick="processTestPayment('Starter Pack', 500)">Test Buy</button>
         </div>
 
-        <div class="pricing-card card-ultimate">
-            <div class="ultimate-badge">Popular</div>
-            <div class="credit-icon"><i class="fas fa-layer-group"></i></div>
-            <div class="plan-name">1500 Credits</div>
-            <p style="color: var(--text-muted); font-size: 0.85rem;">Test Pack</p>
-            <div class="price-box"><div class="price">₹0</div></div>
-            <button class="buy-btn btn-normal" onclick="buyPackage('1500 Credits', 1500, 0, false)">Test Buy</button>
+        <div class="card popular">
+            <div class="badge">BEST VALUE</div>
+            <div class="icon"><i class="fas fa-layer-group"></i></div>
+            <div class="plan-name">Pro Pack</div>
+            <div><span class="old-price">₹499</span> <span class="price">₹0</span></div>
+            <p style="color:#777; font-size:0.9rem;">+1500 Credits</p>
+            <button class="btn-buy" onclick="processTestPayment('Pro Pack', 1500)">Test Buy</button>
         </div>
 
-        <div class="pricing-card">
-            <div class="credit-icon"><i class="fas fa-gem"></i></div>
-            <div class="plan-name">9000 Credits</div>
-            <p style="color: var(--text-muted); font-size: 0.85rem;">Test Pack</p>
-            <div class="price-box"><div class="price">₹0</div></div>
-            <button class="buy-btn btn-normal" onclick="buyPackage('9000 Credits', 9000, 0, false)">Test Buy</button>
+        <div class="card">
+            <div class="icon"><i class="fas fa-gem"></i></div>
+            <div class="plan-name">Ultimate Pack</div>
+            <div><span class="old-price">₹999</span> <span class="price">₹0</span></div>
+            <p style="color:#777; font-size:0.9rem;">+5000 Credits</p>
+            <button class="btn-buy" onclick="processTestPayment('Ultimate Pack', 5000)">Test Buy</button>
         </div>
-
-    </div>
-
-    <div class="pricing-section" id="memberships-section">
-        
-        <div class="pricing-card">
-            <div class="plan-name">Plus Member</div>
-            <div class="price-box"><div class="price">₹0</div></div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Lifetime Access</p>
-            <ul class="features"><li><i class="fas fa-gift"></i> <b>1000 Bonus Credits</b></li><li><i class="fas fa-percent"></i> <b>20% OFF</b> Lifetime</li></ul>
-            <button class="buy-btn btn-normal" onclick="buyPackage('Plus Member', 1000, 0, true)">Test Join</button>
-        </div>
-
-        <div class="pricing-card card-ultimate">
-            <div class="ultimate-badge">Recommended</div>
-            <div class="plan-name">Pro Member</div>
-            <div class="price-box"><div class="price">₹0</div></div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Lifetime Access</p>
-            <ul class="features"><li><i class="fas fa-gift"></i> <b>3500 Bonus Credits</b></li><li><i class="fas fa-percent"></i> <b>40% OFF</b> Lifetime</li></ul>
-            <button class="buy-btn btn-normal" onclick="buyPackage('Pro Member', 3500, 0, true)">Test Join</button>
-        </div>
-
-        <div class="pricing-card">
-            <div class="plan-name">Ultimate Member</div>
-            <div class="price-box"><div class="price">₹0</div></div>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Lifetime Access</p>
-            <ul class="features"><li><i class="fas fa-gift"></i> <b>7000 Bonus Credits</b></li><li><i class="fas fa-percent"></i> <b>70% OFF</b> Lifetime</li></ul>
-            <button class="buy-btn btn-normal" onclick="buyPackage('Ultimate Member', 7000, 0, true)">Test Join</button>
-        </div>
-
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, updateDoc, getDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, updateDoc, increment, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 🔥 NEW FIREBASE CONFIG (NextGen-Official)
+        // 🔥 FINAL CONFIG (PREMIUM)
         const firebaseConfig = {
-            apiKey: "AIzaSyBX9u8NcYs8IZM0LzxO9v6mlqmJydKUtqE",
-            authDomain: "nextgen-official.firebaseapp.com",
-            projectId: "nextgen-official",
-            storageBucket: "nextgen-official.firebasestorage.app",
-            messagingSenderId: "44422243506",
-            appId: "1:44422243506:web:399e35d3099434a363d5ab",
-            measurementId: "G-B3L8HWDHLP"
+            apiKey: "AIzaSyBE4rNCK5MR1Joy-EOJgWgMLqmm6QDEH40",
+            authDomain: "premium-6172b.firebaseapp.com",
+            projectId: "premium-6172b",
+            storageBucket: "premium-6172b.firebasestorage.app",
+            messagingSenderId: "1024825846032",
+            appId: "1:1024825846032:web:93209b4ca94480da32dd95",
+            measurementId: "G-QGEW9H7NST"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        // 🚨 YOUR TELEGRAM CONFIG
-        const TG_TOKEN = "8336599171:AAFNKIKQ_3DBOLO9HHpkgFoFHXd2NO2NOAE"; 
-        const TG_CHAT_ID = "8255824096"; 
-
+        
         let currentUser = null;
-        let currentUserPlan = "Free";
-        let userReferredBy = null;
-        let userCreditsBalance = 0;
 
-        const Toast = Swal.mixin({
-            toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true,
-            iconColor: '#D4AF37', customClass: { popup: 'luxury-toast' },
-            didOpen: (toast) => { toast.addEventListener('mouseenter', Swal.stopTimer); toast.addEventListener('mouseleave', Swal.resumeTimer); }
-        });
-
-        function getOS() {
-            var userAgent = window.navigator.userAgent, platform = window.navigator.platform;
-            if (/Android/.test(userAgent)) return 'Android';
-            if (/iPhone|iPad/.test(userAgent)) return 'iOS';
-            return 'PC/Laptop';
-        }
-
-        async function sendTelegramAlert(message, photoUrl = null) {
-            try {
-                if (photoUrl) {
-                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: TG_CHAT_ID, photo: photoUrl, caption: message, parse_mode: "HTML" })
-                    });
-                } else {
-                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: message, parse_mode: "HTML" })
-                    });
-                }
-            } catch (e) { console.error("Alert Error:", e); }
-        }
-
-        window.switchView = function(view) {
-            const credSec = document.getElementById('credits-section');
-            const memSec = document.getElementById('memberships-section');
-            const btnCred = document.getElementById('btn-credits');
-            const btnMem = document.getElementById('btn-memberships');
-
-            if(view === 'credits') {
-                memSec.classList.remove('active'); credSec.classList.add('active');
-                btnMem.classList.remove('active'); btnCred.classList.add('active');
-            } else {
-                credSec.classList.remove('active'); memSec.classList.add('active');
-                btnCred.classList.remove('active'); btnMem.classList.add('active');
-            }
-        }
-
+        // Check Auth & Load Credits
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
-                try {
-                    const userRef = doc(db, "users", user.uid);
-                    const userSnap = await getDoc(userRef);
-
-                    if (userSnap.exists()) {
-                        const userData = userSnap.data();
-                        currentUserPlan = userData.planType || "Free";
-                        userCreditsBalance = userData.credits || 0;
-                        userReferredBy = userData.referredBy || null;
-
-                        document.getElementById('userBadge').style.display = 'flex';
-                        document.getElementById('userCreditsDisplay').innerText = userCreditsBalance + " Credits";
-                        
-                        if(localStorage.getItem('siteTheme') === 'dark') document.body.classList.add('dark-mode');
-                    }
-                    document.getElementById('loader').style.display = 'none';
-                } catch (error) {
-                    document.getElementById('loader').style.display = 'none';
+                const userRef = doc(db, "users", user.uid);
+                const snap = await getDoc(userRef);
+                if(snap.exists()) {
+                    document.getElementById("currentCredits").innerText = snap.data().credits;
                 }
             } else {
                 window.location.replace("index.html");
             }
         });
 
-        // 🟢 TEST MODE: BYPASS PAYMENT
-        window.buyPackage = async function(packName, addedCredits, amount, isMembership) {
-            if(!currentUser) return;
+        // 🧪 TEST PAYMENT FUNCTION
+        window.processTestPayment = async function(packageName, creditAmount) {
+            if (!currentUser) return;
 
-            // ✅ FAKE PAYMENT LOGIC
-            const paymentId = "TEST_ID_" + Date.now();
+            document.getElementById('loader').style.display = 'flex'; // Show Loader
 
-            try {
-                const userRef = doc(db, "users", currentUser.uid);
-                
-                let dbUpdate = {
-                    credits: increment(addedCredits),
-                    paymentDate: new Date(),
-                    lastPaymentId: paymentId
-                };
-                if(isMembership) { dbUpdate.planType = packName; }
-                await updateDoc(userRef, dbUpdate);
+            // Simulate Network Delay (1.5 seconds)
+            setTimeout(async () => {
+                try {
+                    const userRef = doc(db, "users", currentUser.uid);
+                    
+                    // 1. Add Credits
+                    // 2. Add Transaction Log
+                    await updateDoc(userRef, {
+                        credits: increment(creditAmount),
+                        transactions: arrayUnion({
+                            item: packageName,
+                            amount: 0, // Test Mode
+                            credits: creditAmount,
+                            date: new Date().toISOString(),
+                            status: "TEST_SUCCESS"
+                        })
+                    });
 
-                // 🎁 REWARD LOGIC (Test)
-                if (userReferredBy) {
-                    try {
-                        const referrerRef = doc(db, "users", userReferredBy);
-                        let rewardCredits = isMembership ? 1000 : Math.floor(addedCredits * 0.20);
-                        if(rewardCredits > 0) {
-                            await updateDoc(referrerRef, {
-                                credits: increment(rewardCredits),
-                                referralLogs: arrayUnion({
-                                    buyerName: currentUser.displayName,
-                                    purchasedItem: packName,
-                                    earnedCredits: rewardCredits,
-                                    date: new Date().toISOString(),
-                                    type: "Test Commission"
-                                })
-                            });
-                        }
-                    } catch (err) {}
+                    document.getElementById('loader').style.display = 'none';
+
+                    Swal.fire({
+                        title: 'Payment Successful!',
+                        text: `${creditAmount} Credits added to your wallet (Test Mode).`,
+                        icon: 'success',
+                        confirmButtonColor: '#D4AF37',
+                        background: '#fff'
+                    }).then(() => {
+                        window.location.href = "dashboard.html";
+                    });
+
+                } catch (error) {
+                    console.error(error);
+                    document.getElementById('loader').style.display = 'none';
+                    Swal.fire('Error', 'Transaction failed: ' + error.message, 'error');
                 }
-
-                // 📤 TELEGRAM ALERT
-                let osName = getOS();
-                let msg = `━━━━━━━━━━━━━━━━━━━━\n👤 <b>Name:</b> ${currentUser.displayName}\n📧 <b>Email:</b> ${currentUser.email}\n💰 <b>Credits Added:</b> ${addedCredits}\n💸 <b>Amount:</b> TEST (₹0)\n📦 <b>Item:</b> ${packName}\n✅ <b>Status:</b> TEST SUCCESS`;
-
-                sendTelegramAlert(msg, currentUser.photoURL);
-                
-                Swal.fire({
-                    title: 'Test Purchase Successful!',
-                    text: `${addedCredits} Credits added! (No Money Deducted)`,
-                    icon: 'success',
-                    iconColor: '#D4AF37',
-                    customClass: { popup: 'luxury-popup', title: 'luxury-title' }
-                }).then(() => { window.location.href = "dashboard.html"; });
-                
-            } catch (error) {
-                Toast.fire({ icon: 'error', title: 'Database Update Failed.' });
-            }
+            }, 1500);
         }
     </script>
 </body>
