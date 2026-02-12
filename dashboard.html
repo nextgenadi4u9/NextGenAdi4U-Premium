@@ -31,15 +31,13 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
         
-        /* 🛠️ FIX: No display:none here */
         body { background-color: var(--bg-body); color: var(--text-main); background-image: radial-gradient(var(--border-color) 1px, transparent 1px); background-size: 30px 30px; overflow-x: hidden; }
 
         /* 🌟 NAVBAR 🌟 */
         .navbar { background: var(--bg-nav); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
         
-        @keyframes shine { to { background-position: 200% center; } }
-        
-        .nav-logo { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 800; background: linear-gradient(to right, var(--text-main) 0%, var(--gold) 50%, var(--text-main) 100%); background-size: 200% auto; -webkit-background-clip: text; color: transparent; cursor: pointer; text-decoration: none; animation: shine 3s linear infinite;}
+        .nav-logo { font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 800; color: var(--dark); text-decoration: none; }
+        .nav-logo span { color: var(--gold); }
         
         .profile-container { position: relative; display: flex; align-items: center; gap: 20px;}
         .credit-badge { background: var(--bg-card); color: var(--gold); padding: 6px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: 700; border: 1px solid var(--gold); box-shadow: 0 4px 15px rgba(212,175,55,0.15); display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s;}
@@ -59,16 +57,15 @@
         /* 🌟 HERO SECTION 🌟 */
         .hero { text-align: center; padding: 60px 20px 40px; animation: fadeUp 1s ease; }
         .hero h1 { font-family: 'Cinzel', serif; font-size: 3.5rem; color: var(--text-main); margin-bottom: 10px; }
-        .hero h1 span { background: linear-gradient(to right, var(--gold) 0%, #FFF2B2 50%, var(--gold) 100%); background-size: 200% auto; -webkit-background-clip: text; color: transparent; animation: shine 3s linear infinite; display: inline-block; }
+        .hero h1 span { color: var(--gold); }
         .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 🌟 CARDS GRID 🌟 */
         .container { max-width: 1300px; margin: 0 auto; padding: 0 20px 60px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; opacity: 0; transform: translateY(50px) scale(0.95); animation: cardEntrance 0.6s forwards; transition: 0.4s ease; }
-        @keyframes cardEntrance { to { opacity: 1; transform: translateY(0) scale(1); } }
-        .card:hover { transform: translateY(-12px) scale(1.02); box-shadow: var(--shadow-hover); border-color: var(--gold); }
+        .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s ease; }
+        .card:hover { transform: translateY(-12px); box-shadow: var(--shadow-hover); border-color: var(--gold); }
         .card-icon { width: 60px; height: 60px; background: rgba(212,175,55,0.1); color: var(--gold); border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; margin-bottom: 20px; transition: 0.3s; }
         .card:hover .card-icon { background: var(--gold); color: #fff; transform: rotate(-10deg) scale(1.1); }
         .card-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: var(--text-main); }
@@ -93,32 +90,19 @@
         .close-modal { position: absolute; top: 15px; right: 20px; background: transparent; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; z-index: 10;}
         .modal-title { font-family: 'Cinzel', serif; font-size: 1.8rem; color: var(--text-main); margin-bottom: 20px; text-align: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;}
         
-        .info-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;} 
-        .info-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; } 
-        .info-value { font-size: 1rem; color: var(--text-main); font-weight: 700; }
-        
         .upload-area { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; } 
         .upload-area img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); box-shadow: var(--shadow); }
         .upload-btn { background: var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.3s; border: none; }
         .upload-btn:hover { background: var(--gold); color: #18181B; }
-
-        .lux-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.95rem; outline: none; transition: 0.3s; margin-top: 5px;}
-        .lux-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1); }
         
-        .input-row { display: flex; gap: 10px; align-items: center; width: 100%;}
-        .btn-sm { background: var(--dark); color: var(--gold); border: none; border-radius: 8px; padding: 12px 15px; font-weight: 600; cursor: pointer; transition: 0.3s; white-space: nowrap; }
-        .btn-sm:hover { background: var(--gold); color: var(--dark); }
-        .btn-full { width: 100%; background: var(--dark); color: var(--gold); border: none; border-radius: 8px; padding: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 8px;}
-        .btn-full:hover { background: var(--gold); color: var(--dark); transform: translateY(-2px); }
+        .lux-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); outline: none; transition: 0.3s; margin-top: 5px;}
+        .lux-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1); }
 
         .logs-container { margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px; }
         .logs-scroll { max-height: 180px; overflow-y: auto; padding-right: 5px; }
         .log-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-body); padding: 12px 15px; border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border-color); }
-        .log-reward { font-size: 0.9rem; font-weight: 700; color: #10B981; display: flex; align-items: center; gap: 5px;}
 
-        .luxury-toast { border-radius: 12px !important; border: 1px solid var(--border-color) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important; font-family: 'Inter', sans-serif !important; font-weight: 600 !important; padding: 12px 20px !important; background: var(--bg-card) !important; color: var(--text-main) !important; }
-
-        /* 🟢 LOADER (Visible by Default) */
+        /* 🟢 LOADER */
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); display: flex; justify-content: center; align-items: center; z-index: 9999; flex-direction: column; }
         .spinner { border: 4px solid rgba(212,175,55,0.2); border-top: 4px solid var(--gold); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -130,7 +114,7 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <h3 style="font-family: 'Cinzel'; color: #333;">Loading Vault...</h3>
+        <h3 style="font-family: 'Cinzel'; color: #333;">Connecting to Vault...</h3>
     </div>
 
     <nav class="navbar">
@@ -151,31 +135,26 @@
                 <a class="dropdown-item" onclick="openModal('profileModal')"><i class="fas fa-user-circle"></i> My Profile</a>
                 <a class="dropdown-item" onclick="openModal('referModal')" style="color: var(--gold);"><i class="fas fa-gift"></i> Refer & Earn Logs</a>
                 <a class="dropdown-item" href="pricing.html"><i class="fas fa-store"></i> Buy Credits & Plans</a>
-                <a class="dropdown-item" onclick="openModal('settingsModal')"><i class="fas fa-cog"></i> Account Settings</a>
+                <a class="dropdown-item" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i> Theme</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i> Theme Customization</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item text-danger" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout Securely</a>
+                <a class="dropdown-item text-danger" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </nav>
 
     <div class="hero">
         <h1>Welcome back, <span id="welcomeName">Master</span></h1>
-        <p>Your ultimate digital armory is unlocked. Access your premium tools, codes, and assets below.</p>
+        <p>Your ultimate digital armory is unlocked. Access your premium tools below.</p>
     </div>
 
     <div class="container">
         <div class="grid">
-            <div class="card"><div class="card-icon"><i class="fas fa-laptop-code"></i></div><h3 class="card-title">Full Website Projects</h3><p class="card-desc">Complete, responsive HTML/CSS/JS premium website source codes ready to deploy.</p><button class="download-btn" onclick="window.location.href='website-projects.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-plug"></i></div><h3 class="card-title">Software & Plugins</h3><p class="card-desc">Exclusive pre-activated software, premium WordPress plugins, and essential tools.</p><button class="download-btn" onclick="window.location.href='software-plugins.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-video"></i></div><h3 class="card-title">Latest Viral Reels</h3><p class="card-desc">Copyright-free, high-retention viral video bundles for Instagram & YouTube Shorts.</p><button class="download-btn" onclick="window.location.href='viral-reels.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-layer-group"></i></div><h3 class="card-title">Editing Assets</h3><p class="card-desc">Premium LUTs, transitions, overlays, and VFX packs for Premiere Pro & After Effects.</p><button class="download-btn" onclick="window.location.href='editing-assets.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-music"></i></div><h3 class="card-title">Background Musics</h3><p class="card-desc">Cinematic, trending, and lo-fi background audio tracks (100% No Copyright).</p><button class="download-btn" onclick="window.location.href='background-music.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-robot"></i></div><h3 class="card-title">Premium AI Prompts</h3><p class="card-desc">Master prompts for ChatGPT, Midjourney, and Leonardo AI to generate pro results.</p><button class="download-btn" onclick="window.location.href='ai-prompts.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-graduation-cap"></i></div><h3 class="card-title">Premium Courses</h3><p class="card-desc">Masterclasses on Web Dev, Video Editing, Digital Marketing, and AI Tools.</p><button class="download-btn" onclick="window.location.href='premium-courses.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-object-group"></i></div><h3 class="card-title">Templates & UI Kits</h3><p class="card-desc">Figma UI kits, Canva templates, and YouTube thumbnail PSD files.</p><button class="download-btn" onclick="window.location.href='templates.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
-            <div class="card"><div class="card-icon"><i class="fas fa-gamepad"></i></div><h3 class="card-title">C# & C++ Free Fire Projects</h3><p class="card-desc">Advanced source code scripts, memory management, and injector UI logic for learning.</p><button class="download-btn" onclick="window.location.href='free-fire-scripts.html'"><i class="fas fa-folder-open"></i> Open Vault</button></div>
+            <div class="card"><div class="card-icon"><i class="fas fa-laptop-code"></i></div><h3 class="card-title">Full Website Projects</h3><p class="card-desc">Complete, responsive HTML/CSS/JS premium website source codes.</p><button class="download-btn" onclick="window.location.href='website-projects.html'">Open Vault</button></div>
+            <div class="card"><div class="card-icon"><i class="fas fa-plug"></i></div><h3 class="card-title">Software & Plugins</h3><p class="card-desc">Exclusive pre-activated software, premium WordPress plugins.</p><button class="download-btn" onclick="window.location.href='software-plugins.html'">Open Vault</button></div>
+            <div class="card"><div class="card-icon"><i class="fas fa-video"></i></div><h3 class="card-title">Viral Reels</h3><p class="card-desc">Copyright-free, high-retention viral video bundles.</p><button class="download-btn" onclick="window.location.href='viral-reels.html'">Open Vault</button></div>
+            <div class="card"><div class="card-icon"><i class="fas fa-layer-group"></i></div><h3 class="card-title">Editing Assets</h3><p class="card-desc">Premium LUTs, transitions, overlays, and VFX packs.</p><button class="download-btn" onclick="window.location.href='editing-assets.html'">Open Vault</button></div>
+            <div class="card"><div class="card-icon"><i class="fas fa-music"></i></div><h3 class="card-title">Background Music</h3><p class="card-desc">Cinematic and lo-fi background audio tracks.</p><button class="download-btn" onclick="window.location.href='background-music.html'">Open Vault</button></div>
+            <div class="card"><div class="card-icon"><i class="fas fa-robot"></i></div><h3 class="card-title">AI Prompts</h3><p class="card-desc">Master prompts for ChatGPT, Midjourney, and Leonardo AI.</p><button class="download-btn" onclick="window.location.href='ai-prompts.html'">Open Vault</button></div>
         </div>
     </div>
 
@@ -183,16 +162,11 @@
         <h2 style="font-family: 'Cinzel', serif; color: var(--text-main); margin-bottom: 5px;">NextGen<span style="color: var(--gold);">Adi4U</span></h2>
         <p>Premium Digital Vault & Assets Provider.</p>
         <div class="footer-links">
-            <a href="privacy.html"><i class="fas fa-user-shield"></i> Privacy Policy</a>
-            <a href="disclaimer.html"><i class="fas fa-exclamation-triangle"></i> Disclaimer</a>
-            <a href="support.html"><i class="fas fa-headset"></i> 24/7 Support</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Disclaimer</a>
+            <a href="#">Support</a>
         </div>
-        <div class="footer-socials">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-telegram"></i></a>
-        </div>
-        <p style="margin-top: 25px; font-size: 0.8rem; letter-spacing: 0.5px;">&copy; 2026 NextGenAdi4U. All Rights Reserved.</p>
+        <p style="margin-top: 25px; font-size: 0.8rem;">&copy; 2026 NextGenAdi4U. All Rights Reserved.</p>
     </footer>
 
     <div class="modal-overlay" id="profileModal">
@@ -202,71 +176,40 @@
             <div class="upload-area">
                 <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" id="modalProfilePic">
                 <input type="file" id="picInput" style="display: none;" accept="image/*" onchange="uploadProfilePic(event)">
-                <button class="upload-btn" onclick="document.getElementById('picInput').click()"><i class="fas fa-camera"></i> Change Picture</button>
+                <button class="upload-btn" onclick="document.getElementById('picInput').click()">Change Picture</button>
             </div>
-            <div class="info-group" style="border: none;">
-                <div class="info-label">Display Name</div>
-                <div class="input-row">
-                    <input type="text" id="profNameInput" class="lux-input" placeholder="Your Name">
-                    <button class="btn-sm" onclick="saveName()">Save</button>
-                </div>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <div class="info-group" style="flex: 1; background: rgba(212,175,55,0.05); padding: 10px; border-radius: 8px;">
-                    <div class="info-label">Plan</div><div class="info-value" id="purPlan" style="color: var(--gold);">Loading...</div>
-                </div>
-                <div class="info-group" style="flex: 1; background: rgba(16, 185, 129, 0.05); padding: 10px; border-radius: 8px;">
-                    <div class="info-label">Credits</div><div class="info-value" id="profCredits" style="color: #10B981;">Loading...</div>
-                </div>
-            </div>
+            <input type="text" id="profNameInput" class="lux-input" placeholder="Your Name">
+            <button class="upload-btn" onclick="saveName()" style="width:100%; margin-top:10px; background:var(--dark); color:var(--gold);">Save Name</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="referModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal('referModal')">&times;</button>
-            <h2 class="modal-title">Refer & Earn Logs</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 15px;">Share your link and earn <b>20% Commission!</b></p>
-            <div class="input-row" style="margin-bottom: 15px;">
-                <input type="text" id="referralLinkInput" class="lux-input" readonly style="font-weight: 600; color: var(--gold); margin-top: 0;">
-                <button class="btn-sm" onclick="copyReferralLink()"><i class="fas fa-copy"></i> Copy</button>
-            </div>
-            <div class="logs-container">
-                <div class="logs-scroll" id="referralLogsContainer">
-                    <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-top: 20px;">Fetching logs...</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('settingsModal')">&times;</button>
-            <h2 class="modal-title">Account Settings</h2>
-            <div class="info-group" style="border: none;">
-                <div class="info-label">Registered Email</div>
-                <div class="lux-input" id="profEmail" style="background: var(--border-color); cursor: not-allowed; color: var(--text-muted);">Loading...</div>
-            </div>
-            <div class="info-group" style="border: none; margin-top: 15px;">
-                <button class="btn-full" onclick="requestPasswordReset()"><i class="fas fa-key"></i> Send Password Reset Link</button>
+            <h2 class="modal-title">Referral Logs</h2>
+            <p style="text-align: center; font-size: 0.9rem; color: #777;">Share your link & earn <b>20% Commission</b></p>
+            <input type="text" id="referralLinkInput" class="lux-input" readonly style="text-align:center; font-weight:bold; color:var(--gold);">
+            <button class="upload-btn" onclick="copyReferralLink()" style="width:100%; margin-top:10px;">Copy Link</button>
+            <div class="logs-container" id="referralLogsContainer">
+                <p style="text-align:center; font-size:0.8rem; margin-top:10px;">Fetching Logs...</p>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // 🔥 NEW FIREBASE CONFIG (NextGen-Official)
+        // 🔥 FINAL FIREBASE CONFIG
         const firebaseConfig = {
-            apiKey: "AIzaSyBX9u8NcYs8IZM0LzxO9v6mlqmJydKUtqE",
-            authDomain: "nextgen-official.firebaseapp.com",
-            projectId: "nextgen-official",
-            storageBucket: "nextgen-official.firebasestorage.app",
-            messagingSenderId: "44422243506",
-            appId: "1:44422243506:web:399e35d3099434a363d5ab",
-            measurementId: "G-B3L8HWDHLP"
+            apiKey: "AIzaSyBE4rNCK5MR1Joy-EOJgWgMLqmm6QDEH40",
+            authDomain: "premium-6172b.firebaseapp.com",
+            projectId: "premium-6172b",
+            storageBucket: "premium-6172b.firebasestorage.app",
+            messagingSenderId: "1024825846032",
+            appId: "1:1024825846032:web:93209b4ca94480da32dd95",
+            measurementId: "G-QGEW9H7NST"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -278,92 +221,85 @@
             iconColor: '#D4AF37', customClass: { popup: 'luxury-toast' }
         });
 
-        // 🚀 AUTH LISTENER
+        // 🚀 AUTH & ANTI-LOOP LOGIC
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is Logged In
+                const userRef = doc(db, "users", user.uid);
                 try {
-                    const userRef = doc(db, "users", user.uid);
                     const userSnap = await getDoc(userRef);
 
                     if (userSnap.exists()) {
-                        const currentUserData = userSnap.data();
-                        
-                        // Show Dashboard UI only after data success
-                        document.getElementById('loader').style.display = 'none';
-
-                        const displayName = currentUserData.fullName || user.displayName || "Master";
-                        document.getElementById('navProfileName').innerText = displayName.split(' ')[0];
-                        document.getElementById('welcomeName').innerText = displayName;
-                        document.getElementById('profNameInput').value = displayName;
-
-                        if(currentUserData.profilePicBase64) {
-                            document.getElementById('navProfilePic').src = currentUserData.profilePicBase64;
-                            document.getElementById('modalProfilePic').src = currentUserData.profilePicBase64;
-                        }
-
-                        document.getElementById('profEmail').innerText = user.email;
-                        document.getElementById('purPlan').innerText = currentUserData.planType || "Free";
-                        let credits = currentUserData.credits || 0;
-                        document.getElementById('navCreditText').innerText = credits + " Credits";
-                        document.getElementById('profCredits').innerText = credits;
-
-                        // Theme Check
-                        if(localStorage.getItem('siteTheme') === 'dark') {
-                            document.body.classList.add('dark-mode');
-                            document.getElementById('themeIcon').className = 'fas fa-sun';
-                        }
-
-                        // Referral Link Gen
-                        let originUrl = window.location.origin;
-                        if(originUrl.includes("file://")) originUrl = "https://yourwebsite.com"; 
-                        document.getElementById('referralLinkInput').value = `${originUrl}/index.html?ref=${user.uid}`;
-
-                        // Referral Logs
-                        const logsContainer = document.getElementById('referralLogsContainer');
-                        if (currentUserData.referralLogs && currentUserData.referralLogs.length > 0) {
-                            logsContainer.innerHTML = '';
-                            [...currentUserData.referralLogs].reverse().forEach(log => {
-                                let displayText = "";
-                                if(log.bonus) displayText = `Ref Signup Bonus: ${log.user}`;
-                                else if(log.purchasedItem) displayText = `Comms: ${log.buyerName} bought ${log.purchasedItem}`;
-                                else displayText = "Bonus Received";
-
-                                let displayAmount = log.bonus || log.earnedCredits || 0;
-
-                                logsContainer.innerHTML += `
-                                    <div class="log-item">
-                                        <div>
-                                            <div class="log-user"><i class="fas fa-check-circle"></i> ${displayText}</div>
-                                            <div class="log-plan" style="font-size:0.75rem; color:#999;">${new Date(log.date).toLocaleDateString()}</div>
-                                        </div>
-                                        <div class="log-reward">+${displayAmount} <i class="fas fa-coins"></i></div>
-                                    </div>`;
-                            });
-                        } else {
-                            logsContainer.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem; text-align: center; margin-top: 20px;">No referral earnings yet.</p>';
-                        }
-
-                    } else { 
-                        // If user logged in but no data found
-                        window.location.replace("index.html"); 
+                        // DATA EXISTS - LOAD UI
+                        loadDashboard(user, userSnap.data());
+                    } else {
+                        // ⚠️ DATA MISSING (LOOP CAUSE) - AUTO FIX IT!
+                        console.log("Data missing, fixing...");
+                        const newUserData = {
+                            fullName: user.displayName || "User",
+                            email: user.email,
+                            credits: 100,
+                            planType: "Free",
+                            joinedDate: new Date().toISOString()
+                        };
+                        await setDoc(userRef, newUserData);
+                        loadDashboard(user, newUserData);
                     }
-                } catch(e) {
-                    console.error("Fetch Error:", e);
-                    // Hide loader even if error, so not stuck
-                    document.getElementById('loader').style.display = 'none';
+                } catch (e) {
+                    console.error("DB Error:", e);
+                    // Force logout if DB access fails completely (Rare)
+                    // signOut(auth).then(() => window.location.replace("index.html"));
                 }
             } else { 
                 window.location.replace("index.html"); 
             }
         });
 
-        window.toggleDropdown = function() { document.getElementById('profileDropdown').classList.toggle('active'); }
-        window.openModal = function(id) { 
-            document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
-            document.getElementById(id).classList.add('active'); 
-            document.getElementById('profileDropdown').classList.remove('active'); 
+        function loadDashboard(user, data) {
+            document.getElementById('loader').style.display = 'none';
+
+            // UI Updates
+            const displayName = data.fullName || user.displayName || "Master";
+            document.getElementById('navProfileName').innerText = displayName.split(' ')[0];
+            document.getElementById('welcomeName').innerText = displayName;
+            document.getElementById('profNameInput').value = displayName;
+
+            if(data.profilePicBase64) {
+                document.getElementById('navProfilePic').src = data.profilePicBase64;
+                document.getElementById('modalProfilePic').src = data.profilePicBase64;
+            }
+
+            document.getElementById('navCreditText').innerText = (data.credits || 0) + " Credits";
+
+            // Theme Check
+            if(localStorage.getItem('siteTheme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeIcon').className = 'fas fa-sun';
+            }
+
+            // Referral Link
+            let originUrl = window.location.origin;
+            document.getElementById('referralLinkInput').value = `${originUrl}/index.html?ref=${user.uid}`;
+
+            // Referral Logs
+            const logsContainer = document.getElementById('referralLogsContainer');
+            if (data.referralLogs && data.referralLogs.length > 0) {
+                logsContainer.innerHTML = '';
+                [...data.referralLogs].reverse().forEach(log => {
+                    let txt = log.bonus ? `Bonus: ${log.user}` : `Commission: ${log.buyerName}`;
+                    let amt = log.bonus || log.earnedCredits || 0;
+                    logsContainer.innerHTML += `
+                        <div class="log-item">
+                            <span style="font-size:0.85rem;">${txt}</span>
+                            <span style="color:#10B981; font-weight:bold;">+${amt}</span>
+                        </div>`;
+                });
+            } else {
+                logsContainer.innerHTML = '<p style="text-align:center; font-size:0.8rem; margin-top:10px;">No earnings yet.</p>';
+            }
         }
+
+        window.toggleDropdown = function() { document.getElementById('profileDropdown').classList.toggle('active'); }
+        window.openModal = function(id) { document.getElementById(id).classList.add('active'); document.getElementById('profileDropdown').classList.remove('active'); }
         window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
 
         window.toggleTheme = function() {
@@ -371,30 +307,26 @@
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('siteTheme', isDark ? 'dark' : 'light');
             document.getElementById('themeIcon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-            Toast.fire({ icon: 'success', title: isDark ? 'Dark Mode 🌙' : 'Light Mode ☀️' });
         }
 
         window.saveName = async function() {
-            const newName = document.getElementById('profNameInput').value.trim();
-            if(!newName) return;
-            try {
+            const newName = document.getElementById('profNameInput').value;
+            if(newName) {
                 await updateDoc(doc(db, "users", auth.currentUser.uid), { fullName: newName });
                 location.reload();
-            } catch(e) { Toast.fire({ icon: 'error', title: 'Error updating name.' }); }
+            }
         }
 
         window.uploadProfilePic = function(event) {
             const file = event.target.files[0];
-            if(!file || file.size > 1024 * 1024) { Toast.fire({ icon: 'error', title: 'File too large (Max 1MB)' }); return; }
-            const reader = new FileReader();
-            reader.onloadend = async function() {
-                const base64 = reader.result;
-                await updateDoc(doc(db, "users", auth.currentUser.uid), { profilePicBase64: base64 });
-                document.getElementById('navProfilePic').src = base64;
-                document.getElementById('modalProfilePic').src = base64;
-                Toast.fire({ icon: 'success', title: 'Picture Updated!' });
-            }
-            reader.readAsDataURL(file);
+            if(file && file.size < 1048576) { // 1MB Limit
+                const reader = new FileReader();
+                reader.onloadend = async function() {
+                    await updateDoc(doc(db, "users", auth.currentUser.uid), { profilePicBase64: reader.result });
+                    location.reload();
+                }
+                reader.readAsDataURL(file);
+            } else { Toast.fire({ icon: 'error', title: 'Image too large (Max 1MB)' }); }
         }
 
         window.copyReferralLink = function() {
@@ -405,10 +337,6 @@
         }
 
         window.logoutUser = function() { signOut(auth).then(() => { window.location.replace("index.html"); }); }
-        window.requestPasswordReset = async function() {
-            await sendPasswordResetEmail(auth, auth.currentUser.email);
-            Swal.fire({ title: 'Sent!', text: 'Reset link sent to your email.', icon: 'success' });
-        }
     </script>
 </body>
 </html>
