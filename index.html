@@ -3,356 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NextGenAdi4U | Premium Access</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style> 
-        body { -webkit-user-select: none; user-select: none; } 
-        :root { 
-            --gold: #D4AF37; --gold-dark: #B8860B; 
-            --bg-body: #FAFAFA; --card-bg: #FFFFFF;
-            --text-main: #18181B; --text-muted: #71717A; --border: #E4E4E7;
-            --shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.1);
-        }
+    <title>NextGenAdi4U - Premium Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Premium Golden & White Theme Elements */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.15);
+        }
+
+        .text-gold { color: #D4AF37; }
+        .bg-gold { background-color: #D4AF37; }
+        .border-gold { border-color: #D4AF37; }
         
-        body { 
-            min-height: 100vh; display: flex; justify-content: center; align-items: center; 
-            background-color: var(--bg-body); overflow: hidden; position: relative;
+        .btn-gold {
+            background: linear-gradient(45deg, #D4AF37, #FFDF73);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .btn-gold:hover {
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
         }
 
-        /* ✨ GOLDEN GLOW ANIMATION (White Theme Special) */
-        .ambient-glow {
-            position: absolute; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08), transparent 70%);
-            animation: pulseGlow 6s infinite alternate; z-index: 1; pointer-events: none;
+        .input-field {
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
         }
-        @keyframes pulseGlow { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.1); opacity: 1; } }
-        
-        /* ✨ PARTICLES */
-        .particles {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(#D4AF37 1px, transparent 1px);
-            background-size: 40px 40px; opacity: 0.15; z-index: 1;
+        .input-field:focus {
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            outline: none;
         }
 
-        /* 🏰 AUTH CARD (White Luxury) */
-        .auth-card {
-            position: relative; z-index: 10; width: 100%; max-width: 420px; 
-            background: var(--card-bg); border: 1px solid white;
-            padding: 45px 40px; border-radius: 20px; 
-            box-shadow: var(--shadow);
-            animation: slideUp 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+        /* Custom Toast Notification System */
+        #custom-toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* HEADER */
-        .brand-header { text-align: center; margin-bottom: 30px; }
-        .brand-header h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; letter-spacing: 1px; }
-        .brand-header span { color: var(--gold); }
-        .brand-header p { color: var(--text-muted); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;}
-
-        /* TOGGLE BUTTONS */
-        .toggle-container { 
-            display: flex; background: #F4F4F5; border-radius: 12px; padding: 5px; margin-bottom: 25px; 
-            border: 1px solid var(--border);
+        .custom-toast {
+            background: #fff;
+            border-left: 4px solid #D4AF37;
+            padding: 16px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+            transform: translateX(100%);
         }
-        .toggle-btn { 
-            flex: 1; padding: 10px; border: none; background: transparent; 
-            font-size: 0.9rem; font-weight: 600; color: var(--text-muted); cursor: pointer; 
-            border-radius: 8px; transition: all 0.3s ease; 
+        .toast-error { border-left-color: #ef4444; }
+        .toast-success { border-left-color: #22c55e; }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
         }
-        .toggle-btn.active { background: #FFFFFF; color: var(--text-main); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-        /* FORMS */
-        .form-area { display: none; animation: fadeIn 0.4s ease; }
-        .form-area.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
-
-        .input-group { margin-bottom: 18px; position: relative; }
-        .input-group i { position: absolute; left: 15px; top: 40px; color: var(--gold); font-size: 0.95rem; }
-        .input-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px; margin-left: 5px; }
-        
-        .lux-input { 
-            width: 100%; padding: 12px 12px 12px 40px; 
-            background: #FFFFFF; border: 1px solid var(--border); 
-            border-radius: 10px; font-size: 0.95rem; color: var(--text-main); outline: none; transition: 0.3s; 
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(100%); }
         }
-        .lux-input:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1); }
 
-        /* BUTTONS */
-        .btn-primary { 
-            width: 100%; padding: 14px; background: #0A0A0A; 
-            color: var(--gold); border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; 
-            cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; 
-            margin-top: 10px; 
+        .form-container {
+            transition: all 0.4s ease-in-out;
         }
-        .btn-primary:hover { background: var(--gold); color: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(212,175,55,0.2); }
-
-        .forgot-pass { text-align: right; margin-bottom: 20px; }
-        .forgot-pass a { color: var(--text-muted); font-size: 0.85rem; text-decoration: none; transition: 0.3s; cursor: pointer; font-weight: 500; }
-        .forgot-pass a:hover { color: var(--gold); text-decoration: underline; }
-
-        .divider { display: flex; align-items: center; text-align: center; margin: 25px 0; color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid var(--border); }
-        .divider::before { margin-right: 15px; } .divider::after { margin-left: 15px; }
-        
-        .social-btn { 
-            width: 100%; padding: 12px; background: #FFFFFF; border: 1px solid var(--border); border-radius: 10px; 
-            font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; 
-            transition: 0.3s; color: var(--text-main);
+        .hidden-form {
+            display: none;
+            opacity: 0;
         }
-        .social-btn:hover { background: #F9FAFB; transform: translateY(-2px); border-color: #D1D5DB; }
-
-        /* SWEETALERT CUSTOM */
-        .luxury-popup { background: #FFFFFF !important; border-radius: 16px !important; }
-        .luxury-title { color: #18181B !important; font-family: 'Cinzel' !important; }
-        .luxury-confirm { background-color: #0A0A0A !important; color: #D4AF37 !important; }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
-    <div class="particles"></div>
+    <div id="custom-toast-container"></div>
 
-    <div class="auth-card">
-        <div class="brand-header">
-            <h1>NextGen<span>Adi4U</span></h1>
-            <p>Premium Digital Vault Access</p>
+    <div class="glass-card w-full max-w-md mx-4 rounded-2xl p-8 relative overflow-hidden">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">NextGen<span class="text-gold">Adi4U</span></h1>
+            <p class="text-gray-500 text-sm mt-1">Premium Digital Assets & Codes</p>
         </div>
 
-        <div class="toggle-container">
-            <button class="toggle-btn active" id="btn-login" onclick="toggleView('login')">Login</button>
-            <button class="toggle-btn" id="btn-register" onclick="toggleView('register')">Sign Up</button>
+        <div id="login-form" class="form-container">
+            <h2 class="text-xl font-semibold mb-6 text-gray-700">Welcome Back</h2>
+            <div class="space-y-4">
+                <div>
+                    <input type="email" id="login-email" placeholder="Email Address" class="input-field w-full px-4 py-3 rounded-lg bg-gray-50">
+                </div>
+                <div>
+                    <input type="password" id="login-password" placeholder="Password" class="input-field w-full px-4 py-3 rounded-lg bg-gray-50">
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="handleForgotPassword()" class="text-sm text-gold hover:underline">Forgot Password?</button>
+                </div>
+                <button id="btn-login" class="btn-gold w-full py-3 rounded-lg font-semibold text-lg mt-2 shadow-lg">Sign In</button>
+            </div>
+            
+            <div class="mt-6 flex items-center justify-center space-x-2">
+                <span class="h-px w-full bg-gray-200"></span>
+                <span class="text-gray-400 text-sm font-medium uppercase">Or</span>
+                <span class="h-px w-full bg-gray-200"></span>
+            </div>
+
+            <div class="mt-6 space-y-3">
+                <button id="btn-google-login" class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                    <span class="text-gray-700 font-medium">Continue with Google</span>
+                </button>
+                <button id="btn-gc-login" class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                    <i class="fa-brands fa-apple text-xl"></i>
+                    <span class="text-gray-700 font-medium">Game Center</span>
+                </button>
+            </div>
+
+            <p class="mt-8 text-center text-gray-600 text-sm">
+                New to NextGenAdi4U? <button onclick="toggleForms()" class="text-gold font-semibold hover:underline">Create Account</button>
+            </p>
         </div>
 
-        <div class="form-area active" id="login-section">
-            <form onsubmit="handleLogin(event)">
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" id="loginEmail" class="lux-input" placeholder="Enter your email" required>
-                    <i class="fas fa-envelope"></i>
+        <div id="register-form" class="form-container hidden-form">
+            <h2 class="text-xl font-semibold mb-6 text-gray-700">Create Premium Account</h2>
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4 text-sm text-yellow-800 text-center">
+                <i class="fa-solid fa-gift mr-1 text-gold"></i> Sign up now & get <strong>5000 Credits</strong> free!
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <input type="text" id="reg-username" placeholder="Username" class="input-field w-full px-4 py-3 rounded-lg bg-gray-50">
                 </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" class="lux-input" placeholder="Enter password" required>
-                    <i class="fas fa-lock"></i>
+                <div>
+                    <input type="email" id="reg-email" placeholder="Email Address" class="input-field w-full px-4 py-3 rounded-lg bg-gray-50">
                 </div>
-                <div class="forgot-pass">
-                    <a onclick="forgotPassword()">Forgot Password?</a>
+                <div>
+                    <input type="password" id="reg-password" placeholder="Password" class="input-field w-full px-4 py-3 rounded-lg bg-gray-50">
                 </div>
-                <button type="submit" class="btn-primary" id="loginBtn"><span>Unlock Vault</span> <i class="fas fa-arrow-right"></i></button>
-            </form>
+                <button id="btn-register" class="btn-gold w-full py-3 rounded-lg font-semibold text-lg mt-2 shadow-lg">Sign Up</button>
+            </div>
+
+            <p class="mt-8 text-center text-gray-600 text-sm">
+                Already have an account? <button onclick="toggleForms()" class="text-gold font-semibold hover:underline">Sign In</button>
+            </p>
         </div>
 
-        <div class="form-area" id="register-section">
-            <form onsubmit="handleRegister(event)">
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="regName" class="lux-input" placeholder="Your Name" required>
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" id="regEmail" class="lux-input" placeholder="Email" required>
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="input-group">
-                    <label>Create Password</label>
-                    <input type="password" id="regPassword" class="lux-input" placeholder="Password (Min 6 chars)" required minlength="6">
-                    <i class="fas fa-lock"></i>
-                </div>
-                <button type="submit" class="btn-primary" id="regBtn"><span>Create Account</span> <i class="fas fa-user-plus"></i></button>
-            </form>
-        </div>
-
-        <div class="divider">Or Access With</div>
-        <button class="social-btn" onclick="handleGoogleLogin()">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20"> Google Secure Login
-        </button>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, increment, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, OAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // 🔥 FIREBASE CONFIG
+        // Tuzha Firebase Config
         const firebaseConfig = {
-            apiKey: "AIzaSyBE4rNCK5MR1Joy-EOJgWgMLqmm6QDEH40",
-            authDomain: "premium-6172b.firebaseapp.com",
-            projectId: "premium-6172b",
-            storageBucket: "premium-6172b.firebasestorage.app",
-            messagingSenderId: "1024825846032",
-            appId: "1:1024825846032:web:93209b4ca94480da32dd95",
-            measurementId: "G-QGEW9H7NST"
+            apiKey: "AIzaSyD9s-ys9UlaIl9m_h9_7N28q5-kQ4LzS5Y",
+            authDomain: "digital-9a872.firebaseapp.com",
+            projectId: "digital-9a872",
+            storageBucket: "digital-9a872.firebasestorage.app",
+            messagingSenderId: "878552810082",
+            appId: "1:878552810082:web:d7811b6eebd13b6c45873b",
+            measurementId: "G-N4TG60G2RQ"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const googleProvider = new GoogleAuthProvider();
 
-        // 🚨 YOUR TELEGRAM BOT
-        const TG_TOKEN = "8336599171:AAFNKIKQ_3DBOLO9HHpkgFoFHXd2NO2NOAE"; 
-        const TG_CHAT_ID = "8255824096"; 
+        // --- Custom Toast System ---
+        window.showToast = function(message, type = 'success') {
+            const container = document.getElementById('custom-toast-container');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type === 'error' ? 'toast-error' : 'toast-success'}`;
+            
+            const icon = type === 'error' ? '<i class="fa-solid fa-circle-exclamation text-red-500 text-xl"></i>' : '<i class="fa-solid fa-circle-check text-green-500 text-xl"></i>';
+            toast.innerHTML = `${icon} <div><p class="text-sm font-medium text-gray-800">${message}</p></div>`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.4s forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
 
-        // 🚀 REFERRAL CAPTURE
-        const urlParams = new URLSearchParams(window.location.search);
-        const refID = urlParams.get('ref');
-        if(refID) { sessionStorage.setItem('referredBy', refID); }
+        // --- Form Toggle Logic ---
+        window.toggleForms = function() {
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+            if (loginForm.classList.contains('hidden-form')) {
+                loginForm.classList.remove('hidden-form');
+                regForm.classList.add('hidden-form');
+            } else {
+                loginForm.classList.add('hidden-form');
+                regForm.classList.remove('hidden-form');
+            }
+        }
 
-        // 🔄 AUTO REDIRECT (NO SPAM)
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                await checkAndCreateUser(user);
-                window.location.replace("dashboard.html");
+        // --- Registration Logic with 5000 Credits ---
+        document.getElementById('btn-register').addEventListener('click', async () => {
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const username = document.getElementById('reg-username').value;
+
+            if(!email || !password || !username) return showToast('Please fill all fields!', 'error');
+
+            try {
+                showToast('Creating account...', 'success');
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Add 5000 credits to Firestore Database
+                await setDoc(doc(db, "users", user.uid), {
+                    username: username,
+                    email: email,
+                    credits: 5000,
+                    createdAt: new Date().toISOString()
+                });
+
+                showToast('Account created! 5000 Credits added.', 'success');
+                setTimeout(() => window.location.href = 'dashboard.html', 1500);
+
+            } catch (error) {
+                showToast(error.message, 'error');
             }
         });
 
-        window.toggleView = function(view) {
-            if (view === 'login') { 
-                document.getElementById('register-section').classList.remove('active'); 
-                document.getElementById('login-section').classList.add('active'); 
-                document.getElementById('btn-register').classList.remove('active'); 
-                document.getElementById('btn-login').classList.add('active'); 
-            } else { 
-                document.getElementById('login-section').classList.remove('active'); 
-                document.getElementById('register-section').classList.add('active'); 
-                document.getElementById('btn-login').classList.remove('active'); 
-                document.getElementById('btn-register').classList.add('active'); 
-            }
-        }
-
-        // 📧 REGISTER
-        window.handleRegister = async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('regBtn'); btn.innerHTML = "Creating...";
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
+        // --- Login Logic ---
+        document.getElementById('btn-login').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            if(!email || !password) return showToast('Enter email and password!', 'error');
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await checkAndCreateUser(userCredential.user, name);
-                
-                // 🔔 TELEGRAM ALERT
-                await sendTelegramLog(userCredential.user, "🎉 NEW SIGNUP", name);
-                
-                Swal.fire({ title: 'Welcome!', text: 'Account created successfully!', icon: 'success', customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' } });
-            } catch (error) { 
-                Swal.fire({ title: 'Error', text: error.message, icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' } });
-                btn.innerHTML = '<span>Create Account</span> <i class="fas fa-user-plus"></i>';
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast('Login successful!', 'success');
+                setTimeout(() => window.location.href = 'dashboard.html', 1000);
+            } catch (error) {
+                showToast('Invalid email or password.', 'error');
             }
-        }
+        });
 
-        // 🔐 LOGIN
-        window.handleLogin = async function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('loginBtn'); btn.innerHTML = "Verifying...";
+        // --- Google Login Logic ---
+        document.getElementById('btn-google-login').addEventListener('click', async () => {
+            const provider = new GoogleAuthProvider();
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value);
-                await checkAndCreateUser(userCredential.user);
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
                 
-                // 🔔 TELEGRAM ALERT
-                await sendTelegramLog(userCredential.user, "🟢 EMAIL LOGIN");
-
-            } catch (error) { 
-                Swal.fire({ title: 'Login Failed', text: 'Invalid Email or Password', icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' } });
-                btn.innerHTML = '<span>Unlock Vault</span> <i class="fas fa-arrow-right"></i>';
-            }
-        }
-
-        // 🌐 GOOGLE LOGIN
-        window.handleGoogleLogin = async function() {
-            try {
-                const result = await signInWithPopup(auth, googleProvider);
-                await checkAndCreateUser(result.user);
-                
-                // 🔔 TELEGRAM ALERT
-                await sendTelegramLog(result.user, "🟢 GOOGLE LOGIN");
-
-            } catch (error) { 
-                let msg = error.message;
-                if(msg.includes("unauthorized-domain")) msg = "Please Add Vercel Domain in Firebase Settings!";
-                Swal.fire({ title: 'Error', text: msg, icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' } });
-            }
-        }
-
-        // ❓ FORGOT PASSWORD
-        window.forgotPassword = async function() {
-            const { value: email } = await Swal.fire({
-                title: 'Reset Password',
-                input: 'email',
-                inputLabel: 'Enter your email address',
-                inputPlaceholder: 'name@example.com',
-                showCancelButton: true,
-                customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' }
-            });
-
-            if (email) {
-                try {
-                    await sendPasswordResetEmail(auth, email);
-                    Swal.fire({ title: 'Sent!', text: 'Check your email for reset link.', icon: 'success', customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' } });
-                } catch (e) {
-                    Swal.fire({ title: 'Error', text: e.message, icon: 'error', customClass: { popup: 'luxury-popup', title: 'luxury-title', confirmButton: 'luxury-confirm' } });
-                }
-            }
-        }
-
-        // 🛠️ DATABASE HANDLER
-        async function checkAndCreateUser(user, name = null) {
-            const userRef = doc(db, "users", user.uid);
-            const snap = await getDoc(userRef);
-
-            if (!snap.exists()) {
-                let userData = {
-                    fullName: name || user.displayName || "User",
-                    email: user.email,
-                    credits: 100, // 🎁 Bonus
-                    planType: "Free",
-                    joinedDate: new Date().toISOString()
-                };
-
-                const referrerID = sessionStorage.getItem('referredBy');
-                if (referrerID && referrerID !== user.uid) {
-                    userData.referredBy = referrerID;
-                    try {
-                        await updateDoc(doc(db, "users", referrerID), {
-                            credits: increment(20), // 🎁 Ref Bonus
-                            referralLogs: arrayUnion({ type: 'signup', user: userData.fullName, bonus: 20, date: new Date().toISOString() })
-                        });
-                    } catch (e) {}
-                }
-                await setDoc(userRef, userData);
-            }
-        }
-
-        // 📢 TELEGRAM ALERT (ANTI-SPAM & PHOTO)
-        async function sendTelegramLog(user, type, manualName = null) {
-            const displayName = manualName || user.displayName || "User";
-            const email = user.email;
-            const photo = user.photoURL;
-            
-            const text = `🔔 *${type}*\n\n👤 *Name:* ${displayName}\n📧 *Email:* ${email}\n⏰ *Time:* ${new Date().toLocaleString()}`;
-
-            try {
-                if (photo) {
-                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: TG_CHAT_ID, photo: photo, caption: text, parse_mode: "Markdown" })
+                // Check if new user to give credits
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (!userDoc.exists()) {
+                    await setDoc(doc(db, "users", user.uid), {
+                        username: user.displayName || 'Google User',
+                        email: user.email,
+                        credits: 5000,
+                        createdAt: new Date().toISOString()
                     });
+                    showToast('Welcome! 5000 Credits added.', 'success');
                 } else {
-                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: "Markdown" })
-                    });
+                    showToast('Login successful!', 'success');
                 }
-            } catch (e) { console.error("TG Error", e); }
+                setTimeout(() => window.location.href = 'dashboard.html', 1500);
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        // --- Game Center Login Logic ---
+        document.getElementById('btn-gc-login').addEventListener('click', async () => {
+            const provider = new OAuthProvider('gc.apple.com');
+            try {
+                const result = await signInWithPopup(auth, provider);
+                // Note: You need to configure Game Center in Apple Developer Portal & Firebase Console for this to work perfectly.
+                showToast('Game Center login successful!', 'success');
+                setTimeout(() => window.location.href = 'dashboard.html', 1500);
+            } catch (error) {
+                showToast('Game Center Error: Make sure it is enabled in Firebase Console.', 'error');
+            }
+        });
+
+        // --- Forgot Password Logic ---
+        window.handleForgotPassword = async function() {
+            const email = document.getElementById('login-email').value;
+            if(!email) {
+                showToast('Please enter your email address first!', 'error');
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showToast('Password reset link sent to your email!', 'success');
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
         }
     </script>
 </body>
