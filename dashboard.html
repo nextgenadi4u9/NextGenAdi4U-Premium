@@ -16,7 +16,7 @@
             overflow-x: hidden;
         }
 
-        /* Golden & White Theme Elements */
+        /* Premium Golden & White Theme */
         .text-gold { color: #D4AF37; }
         .bg-gold { background-color: #D4AF37; }
         .border-gold { border-color: #D4AF37; }
@@ -32,14 +32,15 @@
             background: #fff;
             border: 1px solid rgba(212, 175, 55, 0.1);
             border-radius: 16px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            cursor: pointer;
         }
         
         .premium-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2);
         }
 
         .btn-gold {
@@ -52,45 +53,58 @@
             transform: translateY(-2px);
         }
 
-        /* Dropdown Animation */
-        .dropdown-menu {
+        /* Modal / Popup Styles */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 100;
             display: none;
             opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
+            transition: opacity 0.3s ease;
+            align-items: center; justify-content: center;
         }
-        .dropdown-menu.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
+        .modal-overlay.active { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: #fff;
+            width: 90%; max-w: 400px;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        /* Dropdown Animation */
+        .dropdown-menu {
+            display: none; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
+        }
+        .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0); }
 
         /* Toast System */
-        #custom-toast-container {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        #toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .custom-toast {
-            background: #fff;
-            border-left: 4px solid #D4AF37;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            display: flex; align-items: center; gap: 12px;
+            background: #fff; border-left: 4px solid #D4AF37; padding: 16px 24px; border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px;
             animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes fadeOut { to { opacity: 0; transform: translateX(100%); } }
+
+        /* Loader Animation */
+        .loader {
+            border: 3px solid #f3f3f3; border-top: 3px solid #D4AF37;
+            border-radius: 50%; width: 24px; height: 24px;
+            animation: spin 1s linear infinite; display: none;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-gray-50">
 
-    <div id="custom-toast-container"></div>
+    <div id="toast-container"></div>
 
     <nav class="glass-nav fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,10 +114,10 @@
                 </div>
 
                 <div class="flex items-center space-x-6">
-                    <div class="hidden sm:flex items-center bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full">
-                        <i class="fa-solid fa-coins text-gold mr-2"></i>
-                        <span class="font-semibold text-gray-700" id="user-credits">Loading...</span>
-                        <span class="text-gray-500 text-sm ml-1">CR</span>
+                    <div class="hidden sm:flex items-center bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full shadow-sm">
+                        <i class="fa-solid fa-coins text-gold mr-2 animate-pulse"></i>
+                        <span class="font-bold text-gray-800" id="user-credits">Loading...</span>
+                        <span class="text-gray-500 text-sm ml-1 font-medium">CR</span>
                     </div>
 
                     <div class="relative">
@@ -115,17 +129,18 @@
                             <i class="fa-solid fa-chevron-down ml-2 text-sm text-gray-400"></i>
                         </button>
 
-                        <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
+                        <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
                             <div class="px-4 py-3 border-b border-gray-100 sm:hidden">
                                 <p class="text-sm text-gray-500">Balance</p>
-                                <p class="text-sm font-semibold text-gold"><span id="mobile-credits">0</span> CR</p>
+                                <p class="text-sm font-bold text-gold"><span id="mobile-credits">0</span> CR</p>
                             </div>
-                            <a href="#" onclick="actionMessage('Edit Profile feature coming soon!')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gold transition"><i class="fa-regular fa-user mr-2 w-5"></i> Edit Profile</a>
-                            <a href="#" onclick="actionMessage('Theme Customizer coming soon!')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gold transition"><i class="fa-solid fa-palette mr-2 w-5"></i> Customize Theme</a>
-                            <a href="#" onclick="actionMessage('Security Settings opening...')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gold transition"><i class="fa-solid fa-shield-halved mr-2 w-5"></i> Security</a>
-                            <a href="#" onclick="actionMessage('Share your code to get 500 Credits!')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gold transition"><i class="fa-solid fa-users-viewfinder mr-2 w-5"></i> Refer & Earn</a>
+                            <a href="#" onclick="openModal('editProfileModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-regular fa-user mr-3 w-4"></i> Edit Profile</a>
+                            <a href="#" onclick="openModal('earnCreditsModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition font-semibold"><i class="fa-solid fa-play mr-3 w-4 text-green-500"></i> Earn Credits</a>
+                            <a href="#" onclick="openModal('referModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-solid fa-users-viewfinder mr-3 w-4"></i> Refer & Earn</a>
+                            <a href="#" onclick="openModal('customizeModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-solid fa-palette mr-3 w-4"></i> Customize Theme</a>
+                            <a href="#" onclick="openModal('securityModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-solid fa-shield-halved mr-3 w-4"></i> Security</a>
                             <div class="border-t border-gray-100 mt-2 pt-2">
-                                <button id="btn-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i class="fa-solid fa-arrow-right-from-bracket mr-2 w-5"></i> Logout</button>
+                                <button id="btn-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-medium"><i class="fa-solid fa-arrow-right-from-bracket mr-3 w-4"></i> Logout</button>
                             </div>
                         </div>
                     </div>
@@ -134,57 +149,119 @@
         </div>
     </nav>
 
-    <div class="pt-28 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Unlock Premium Digital Assets</h2>
-        <p class="text-gray-500 max-w-2xl mx-auto text-lg">Use your credits to unlock high-quality tools, source codes, and exclusive content directly from the NextGenAdi4U vault.</p>
+    <div id="earnCreditsModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <div class="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-200">
+                <i class="fa-solid fa-video text-2xl text-gold"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Earn Free Credits</h3>
+            <p class="text-gray-500 text-sm mb-6">Watch a short ad to instantly earn <span class="font-bold text-gold">100 Credits</span>. You can use these to unlock premium assets.</p>
+            
+            <button id="btn-watch-ad" class="btn-gold w-full py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> Watch Ad Now
+                <div id="ad-loader" class="loader ml-2"></div>
+            </button>
+            <button onclick="closeModal('earnCreditsModal')" class="mt-4 text-gray-400 hover:text-gray-600 text-sm font-medium">Cancel</button>
+        </div>
+    </div>
+
+    <div id="editProfileModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Edit Profile</h3>
+            <input type="text" placeholder="Update Username" class="w-full px-4 py-2 border rounded-lg mb-4 focus:outline-none focus:border-gold">
+            <button onclick="closeModal('editProfileModal')" class="btn-gold w-full py-2 rounded-lg font-bold">Save Changes</button>
+            <button onclick="closeModal('editProfileModal')" class="w-full mt-2 text-gray-500 text-sm py-2">Close</button>
+        </div>
+    </div>
+
+    <div id="referModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Refer & Earn</h3>
+            <p class="text-gray-500 text-sm mb-4">Share this code to get 500 Credits.</p>
+            <div class="bg-gray-100 p-3 rounded-lg font-mono text-lg tracking-widest text-gray-700 mb-4 border border-dashed border-gray-300">ADI4U-99X</div>
+            <button onclick="closeModal('referModal')" class="btn-gold w-full py-2 rounded-lg font-bold">Copy Link</button>
+            <button onclick="closeModal('referModal')" class="w-full mt-2 text-gray-500 text-sm py-2">Close</button>
+        </div>
+    </div>
+
+    <div class="pt-32 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <div class="inline-block bg-yellow-50 text-gold px-4 py-1.5 rounded-full text-sm font-bold mb-4 border border-yellow-200">
+            <i class="fa-solid fa-bolt mr-1"></i> Premium Library
+        </div>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">Unlock Digital Excellence</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg">Browse categories. Exploring is free. Use credits only when you are ready to download the asset.</p>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="cards-container">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="cards-container">
             </div>
     </div>
 
-    <footer class="bg-white border-t border-gray-200 mt-12 py-8 text-center">
-        <p class="text-gray-500 text-sm">© 2026 NextGenAdi4U. All rights reserved.</p>
+    <footer class="bg-white border-t border-gray-200 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
+                <div class="text-2xl font-bold text-gray-800">NextGen<span class="text-gold">Adi4U</span></div>
+                
+                <a href="#" class="flex items-center gap-2 bg-gradient-to-r from-[#D4AF37] to-[#FFDF73] text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform">
+                    <i class="fa-solid fa-headset text-xl"></i> 24/7 Premium Support
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-medium text-gray-500 mb-8">
+                <a href="#" class="hover:text-gold transition">Report Link</a>
+                <a href="#" class="hover:text-gold transition">FAQ</a>
+                <a href="#" class="hover:text-gold transition">About Us</a>
+                <a href="#" class="hover:text-gold transition">Rules & Regulations</a>
+                <a href="#" class="hover:text-gold transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gold transition">Advertising</a>
+                <a href="#" class="hover:text-gold transition">Terms of Service</a>
+                <a href="#" class="hover:text-gold transition">Disclaimer</a>
+            </div>
+            <div class="text-center text-gray-400 text-sm border-t border-gray-100 pt-8">
+                © 2026 NextGenAdi4U. Created by AS Solutions. All rights reserved.
+            </div>
+        </div>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // Same Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyD9s-ys9UlaIl9m_h9_7N28q5-kQ4LzS5Y",
             authDomain: "digital-9a872.firebaseapp.com",
             projectId: "digital-9a872",
             storageBucket: "digital-9a872.firebasestorage.app",
             messagingSenderId: "878552810082",
-            appId: "1:878552810082:web:d7811b6eebd13b6c45873b",
-            measurementId: "G-N4TG60G2RQ"
+            appId: "1:878552810082:web:d7811b6eebd13b6c45873b"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Toast System (Global)
+        let currentUserDocRef = null;
+        let currentCredits = 0;
+
+        // Toast System
         window.showToast = function(message, type = 'success') {
-            const container = document.getElementById('custom-toast-container');
+            const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `custom-toast border-l-4 ${type === 'error' ? 'border-red-500' : 'border-gold'}`;
             const icon = type === 'error' ? '<i class="fa-solid fa-circle-exclamation text-red-500 text-xl"></i>' : '<i class="fa-solid fa-circle-check text-gold text-xl"></i>';
-            toast.innerHTML = `${icon} <div><p class="text-sm font-medium text-gray-800">${message}</p></div>`;
+            toast.innerHTML = `${icon} <div><p class="text-sm font-bold text-gray-800">${message}</p></div>`;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.animation = 'fadeOut 0.4s forwards';
-                setTimeout(() => toast.remove(), 400);
-            }, 3000);
+            setTimeout(() => { toast.style.animation = 'fadeOut 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        window.actionMessage = function(msg) {
-            showToast(msg, 'success');
+        // Modal Controls
+        window.openModal = function(modalId) {
             document.getElementById('profile-dropdown').classList.remove('show');
+            document.getElementById(modalId).classList.add('active');
+        }
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
 
         // Dropdown Toggle
@@ -192,80 +269,107 @@
             e.stopPropagation();
             document.getElementById('profile-dropdown').classList.toggle('show');
         });
-        document.addEventListener('click', () => {
-            document.getElementById('profile-dropdown').classList.remove('show');
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.modal-content')) { document.getElementById('profile-dropdown').classList.remove('show'); }
         });
 
-        // Authentication & User Data Fetching
+        // Authentication Observer
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User is signed in, fetch data from Firestore
-                try {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        
-                        // Update UI with User Data
-                        const displayName = userData.username || user.displayName || user.email.split('@')[0];
-                        document.getElementById('user-name').innerText = displayName;
-                        document.getElementById('user-initial').innerText = displayName.charAt(0).toUpperCase();
-                        
-                        document.getElementById('user-credits').innerText = userData.credits || 0;
-                        document.getElementById('mobile-credits').innerText = userData.credits || 0;
-                        
-                        showToast(`Welcome back, ${displayName}!`);
-                    } else {
-                        // Fallback if document doesn't exist
-                        document.getElementById('user-name').innerText = user.email.split('@')[0];
-                        document.getElementById('user-credits').innerText = "0";
-                    }
-                } catch (error) {
-                    console.error("Error fetching user data:", error);
-                    showToast("Failed to load user data.", 'error');
-                }
+                currentUserDocRef = doc(db, "users", user.uid);
+                fetchUserData();
             } else {
-                // User is not signed in, redirect to login
                 window.location.href = "index.html";
             }
         });
 
-        // Logout Logic
-        document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                window.location.href = "index.html";
-            }).catch((error) => {
-                showToast(error.message, 'error');
-            });
+        async function fetchUserData() {
+            try {
+                const userDoc = await getDoc(currentUserDocRef);
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const displayName = userData.username || "User";
+                    document.getElementById('user-name').innerText = displayName;
+                    document.getElementById('user-initial').innerText = displayName.charAt(0).toUpperCase();
+                    
+                    currentCredits = userData.credits || 0;
+                    document.getElementById('user-credits').innerText = currentCredits;
+                    document.getElementById('mobile-credits').innerText = currentCredits;
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        // Earn Credits Logic (Watch Ad Simulation)
+        document.getElementById('btn-watch-ad').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-watch-ad');
+            const loader = document.getElementById('ad-loader');
+            
+            // UI Loading state
+            btn.disabled = true;
+            btn.style.opacity = "0.8";
+            loader.style.display = "inline-block";
+            btn.childNodes[0].nodeValue = "Watching Ad... ";
+
+            // Simulate Ad Time (3 seconds)
+            setTimeout(async () => {
+                try {
+                    // Update Database
+                    const newCredits = currentCredits + 100;
+                    await updateDoc(currentUserDocRef, { credits: newCredits });
+                    
+                    // Update Local Variables and UI
+                    currentCredits = newCredits;
+                    document.getElementById('user-credits').innerText = currentCredits;
+                    document.getElementById('mobile-credits').innerText = currentCredits;
+                    
+                    // Reset UI
+                    closeModal('earnCreditsModal');
+                    showToast('100 Credits added successfully!', 'success');
+                    
+                } catch (error) {
+                    showToast('Error adding credits.', 'error');
+                } finally {
+                    btn.disabled = false;
+                    btn.style.opacity = "1";
+                    loader.style.display = "none";
+                    btn.childNodes[0].nodeValue = " Watch Ad Now ";
+                }
+            }, 3000);
         });
 
-        // Render 10 Cards Dynamically
-        const cardsContainer = document.getElementById('cards-container');
-        const cardData = [
-            { title: "Premium App UI Kit", price: 500, icon: "fa-mobile-screen-button" },
-            { title: "E-Commerce Script", price: 1200, icon: "fa-cart-shopping" },
-            { title: "Admin Dashboard Template", price: 800, icon: "fa-chart-pie" },
-            { title: "Vector Graphics Bundle", price: 300, icon: "fa-pen-nib" },
-            { title: "SEO Tool Source Code", price: 2000, icon: "fa-magnifying-glass-chart" },
-            { title: "Animation Presets", price: 400, icon: "fa-film" },
-            { title: "Music Streaming Clone", price: 2500, icon: "fa-music" },
-            { title: "Cyber Security E-Book", price: 150, icon: "fa-book-shield" },
-            { title: "3D Icon Pack", price: 350, icon: "fa-cube" },
-            { title: "Ultimate Font Collection", price: 200, icon: "fa-font" }
+        // Logout
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // Inject 9 Specific Categories
+        const categories = [
+            { name: "SoftWares", icon: "fa-laptop-code", desc: "Premium PC and Mac software setups.", link: "softwares.html" },
+            { name: "Pc Games", icon: "fa-gamepad", desc: "AAA and Indie game setups for PC.", link: "pc_games.html" },
+            { name: "Mobile Games", icon: "fa-mobile-screen-button", desc: "Modded and premium APKs.", link: "mobile_games.html" },
+            { name: "Viral Reels Pack", icon: "fa-video", desc: "Trending templates and raw clips.", link: "reels_pack.html" },
+            { name: "Editing Assets", icon: "fa-photo-film", desc: "Overlays, LUTs, and VFX packs.", link: "editing_assets.html" },
+            { name: "Courses", icon: "fa-graduation-cap", desc: "Premium skill development courses.", link: "courses.html" },
+            { name: "Source Codes", icon: "fa-code", desc: "App and software source files.", link: "source_codes.html" },
+            { name: "Web Codes", icon: "fa-html5", desc: "HTML, CSS, JS, and full templates.", link: "web_codes.html" },
+            { name: "Steam Accounts", icon: "fa-steam", desc: "Pre-loaded Steam game accounts.", link: "steam_accounts.html" }
         ];
 
-        cardData.forEach((card, index) => {
+        const cardsContainer = document.getElementById('cards-container');
+        categories.forEach(cat => {
             const cardHTML = `
-                <div class="premium-card p-5 flex flex-col justify-between h-full">
+                <div class="premium-card p-6 flex flex-col justify-between h-full bg-white group">
                     <div>
-                        <div class="w-12 h-12 rounded-lg bg-yellow-50 flex items-center justify-center mb-4 border border-yellow-100">
-                            <i class="fa-solid ${card.icon} text-2xl text-gold"></i>
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-50 to-white flex items-center justify-center mb-5 border border-yellow-100 shadow-sm group-hover:scale-110 transition duration-300">
+                            <i class="fa-solid ${cat.icon} text-3xl text-gold"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2">${card.title}</h3>
-                        <p class="text-sm text-gray-500 mb-4">Download the full source files and documentation for immediate use.</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">${cat.name}</h3>
+                        <p class="text-sm text-gray-500 mb-6 font-medium">${cat.desc}</p>
                     </div>
-                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
-                        <span class="font-bold text-gray-700"><i class="fa-solid fa-coins text-gold text-sm mr-1"></i>${card.price}</span>
-                        <button onclick="window.location.href='product_${index+1}.html'" class="btn-gold px-4 py-2 rounded-lg text-sm font-medium">Explore</button>
+                    <div class="mt-auto">
+                        <button onclick="window.location.href='${cat.link}'" class="w-full btn-gold py-3 rounded-xl font-bold tracking-wide flex justify-center items-center gap-2">
+                            Explore <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </button>
                     </div>
                 </div>
             `;
