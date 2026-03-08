@@ -7,102 +7,134 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #fdfbfb;
-            color: #333;
-            overflow-x: hidden;
+        :root {
+            --bg-color: #fdfbfb;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(212, 175, 55, 0.1);
         }
 
-        /* Premium Golden & White Theme */
+        /* Dark Mode Variables */
+        .dark-theme {
+            --bg-color: #121212;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --card-bg: #1e1e1e;
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease, filter 0.3s ease;
+        }
+
+        /* Golden Theme Elements */
         .text-gold { color: #D4AF37; }
         .bg-gold { background-color: #D4AF37; }
         .border-gold { border-color: #D4AF37; }
         
         .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.4s ease;
         }
 
         .premium-card {
-            background: #fff;
-            border: 1px solid rgba(212, 175, 55, 0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 16px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
             cursor: pointer;
+            opacity: 0; /* For animation */
+            transform: translateY(30px); /* For animation */
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
         
+        /* Hyper-Animation for Cards Hover */
         .premium-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.2);
+            transform: translateY(-8px) scale(1.02) !important;
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Entrance Animation Keyframes */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .btn-gold {
             background: linear-gradient(45deg, #D4AF37, #FFDF73);
-            color: #fff;
+            color: #111;
             transition: all 0.3s ease;
         }
         .btn-gold:hover {
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
             transform: translateY(-2px);
         }
 
-        /* Modal / Popup Styles */
+        /* Modals (Popups) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 100;
-            display: none;
-            opacity: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            z-index: 100; display: none; opacity: 0;
             transition: opacity 0.3s ease;
-            align-items: center; justify-content: center;
+            align-items: center; justify-content: center; padding: 15px;
         }
         .modal-overlay.active { display: flex; opacity: 1; }
         
         .modal-content {
-            background: #fff;
-            width: 90%; max-w: 400px;
-            border-radius: 20px;
-            padding: 24px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            transform: scale(0.8);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--card-bg);
+            width: 100%; max-w: 420px;
+            border-radius: 24px; padding: 28px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            transform: scale(0.7) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
-        /* Dropdown Animation */
+        /* Dropdown */
         .dropdown-menu {
-            display: none; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            display: none; opacity: 0; transform: translateY(-15px) scale(0.95); 
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: top right;
         }
-        .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0); }
+        .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0) scale(1); }
+        .dropdown-item { color: var(--text-main); }
+        .dropdown-item:hover { background-color: rgba(212, 175, 55, 0.1); color: #D4AF37; }
 
-        /* Toast System */
-        #toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        /* Sliders */
+        .range-slider {
+            -webkit-appearance: none; width: 100%; height: 6px; border-radius: 5px; background: #ddd; outline: none;
+        }
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #D4AF37; cursor: pointer;
+        }
+        
+        /* Toast */
+        #toast-container { position: fixed; top: 90px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .custom-toast {
-            background: #fff; border-left: 4px solid #D4AF37; padding: 16px 24px; border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 12px;
-            animation: slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            background: var(--card-bg); border-left: 4px solid #D4AF37; padding: 16px 24px; border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 12px;
+            animation: slideInRight 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            color: var(--text-main);
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-
-        /* Loader Animation */
-        .loader {
-            border: 3px solid #f3f3f3; border-top: 3px solid #D4AF37;
-            border-radius: 50%; width: 24px; height: 24px;
-            animation: spin 1s linear infinite; display: none;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
 
     <div id="toast-container"></div>
 
@@ -110,37 +142,37 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <div class="flex-shrink-0 flex items-center cursor-pointer">
-                    <h1 class="text-2xl font-bold text-gray-800 tracking-tight">NextGen<span class="text-gold">Adi4U</span></h1>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">NextGen<span class="text-gold">Adi4U</span></h1>
                 </div>
 
-                <div class="flex items-center space-x-6">
-                    <div class="hidden sm:flex items-center bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full shadow-sm">
-                        <i class="fa-solid fa-coins text-gold mr-2 animate-pulse"></i>
-                        <span class="font-bold text-gray-800" id="user-credits">Loading...</span>
+                <div class="flex items-center space-x-3 sm:space-x-6">
+                    <div class="hidden sm:flex items-center bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full shadow-sm text-gray-800">
+                        <i class="fa-solid fa-coins text-gold mr-2 animate-bounce"></i>
+                        <span class="font-bold" id="user-credits">...</span>
                         <span class="text-gray-500 text-sm ml-1 font-medium">CR</span>
                     </div>
 
                     <div class="relative">
                         <button id="profile-btn" class="flex items-center focus:outline-none">
-                            <div class="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center font-bold shadow-md border-2 border-white">
+                            <div class="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center font-bold shadow-lg border-2 border-white transition transform hover:scale-105">
                                 <span id="user-initial">U</span>
                             </div>
-                            <span class="ml-2 font-medium text-gray-700 hidden md:block" id="user-name">User</span>
-                            <i class="fa-solid fa-chevron-down ml-2 text-sm text-gray-400"></i>
+                            <span class="ml-2 font-medium hidden md:block" id="user-name">User</span>
+                            <i class="fa-solid fa-chevron-down ml-2 text-sm text-gold"></i>
                         </button>
 
-                        <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-3 w-60 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
+                        <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-4 w-64 rounded-2xl shadow-2xl py-3 z-50">
                             <div class="px-4 py-3 border-b border-gray-100 sm:hidden">
-                                <p class="text-sm text-gray-500">Balance</p>
-                                <p class="text-sm font-bold text-gold"><span id="mobile-credits">0</span> CR</p>
+                                <p class="text-sm opacity-70">Balance</p>
+                                <p class="text-lg font-bold text-gold"><span id="mobile-credits">0</span> CR</p>
                             </div>
-                            <a href="#" onclick="openModal('editProfileModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-regular fa-user mr-3 w-4"></i> Edit Profile</a>
-                            <a href="#" onclick="openModal('earnCreditsModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition font-semibold"><i class="fa-solid fa-play mr-3 w-4 text-green-500"></i> Earn Credits</a>
-                            <a href="#" onclick="openModal('referModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-solid fa-users-viewfinder mr-3 w-4"></i> Refer & Earn</a>
-                            <a href="#" onclick="openModal('customizeModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-solid fa-palette mr-3 w-4"></i> Customize Theme</a>
-                            <a href="#" onclick="openModal('securityModal')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-50 hover:text-gold transition"><i class="fa-solid fa-shield-halved mr-3 w-4"></i> Security</a>
+                            <a href="#" onclick="openModal('editProfileModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-regular fa-user mr-3 text-gold"></i> Edit Profile</a>
+                            <a href="#" onclick="openModal('earnCreditsModal')" class="dropdown-item block px-5 py-3 text-sm font-bold transition"><i class="fa-solid fa-play mr-3 text-green-500"></i> Earn Free Credits</a>
+                            <a href="#" onclick="openModal('referModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-users-viewfinder mr-3 text-gold"></i> Refer & Earn</a>
+                            <a href="#" onclick="openModal('customizeModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-palette mr-3 text-gold"></i> Customize Theme</a>
+                            <a href="#" onclick="openModal('securityModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-shield-halved mr-3 text-gold"></i> Security</a>
                             <div class="border-t border-gray-100 mt-2 pt-2">
-                                <button id="btn-logout" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-medium"><i class="fa-solid fa-arrow-right-from-bracket mr-3 w-4"></i> Logout</button>
+                                <button id="btn-logout" class="w-full text-left px-5 py-3 text-sm text-red-500 hover:bg-red-50 hover:text-red-600 transition font-bold rounded-b-xl"><i class="fa-solid fa-power-off mr-3"></i> Secure Logout</button>
                             </div>
                         </div>
                     </div>
@@ -149,83 +181,100 @@
         </div>
     </nav>
 
-    <div id="earnCreditsModal" class="modal-overlay">
+    <div id="customizeModal" class="modal-overlay">
         <div class="modal-content text-center">
-            <div class="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-200">
-                <i class="fa-solid fa-video text-2xl text-gold"></i>
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Earn Free Credits</h3>
-            <p class="text-gray-500 text-sm mb-6">Watch a short ad to instantly earn <span class="font-bold text-gold">100 Credits</span>. You can use these to unlock premium assets.</p>
+            <h3 class="text-2xl font-bold mb-6"><i class="fa-solid fa-palette text-gold mr-2"></i> Theme & Display</h3>
             
-            <button id="btn-watch-ad" class="btn-gold w-full py-3 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
-                <i class="fa-solid fa-play"></i> Watch Ad Now
-                <div id="ad-loader" class="loader ml-2"></div>
-            </button>
-            <button onclick="closeModal('earnCreditsModal')" class="mt-4 text-gray-400 hover:text-gray-600 text-sm font-medium">Cancel</button>
+            <div class="mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <p class="text-sm font-bold mb-3 text-left">Mode Selection</p>
+                <div class="flex justify-between gap-4">
+                    <button id="btn-light-mode" class="flex-1 py-2 rounded-lg border-2 border-gold font-bold text-gray-800 bg-white shadow-sm"><i class="fa-solid fa-sun mr-1"></i> Light</button>
+                    <button id="btn-dark-mode" class="flex-1 py-2 rounded-lg border-2 border-transparent bg-gray-800 text-white font-bold hover:border-gold transition"><i class="fa-solid fa-moon mr-1 text-gold"></i> Dark</button>
+                </div>
+            </div>
+
+            <div class="mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-left">
+                <p class="text-sm font-bold mb-2 flex justify-between"><span>Display Brightness</span> <span id="brightness-val" class="text-gold">100%</span></p>
+                <input type="range" id="brightness-slider" class="range-slider mt-2" min="50" max="120" value="100">
+            </div>
+
+            <button onclick="closeModal('customizeModal')" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg">Save Preferences</button>
+        </div>
+    </div>
+
+    <div id="securityModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-6 text-center"><i class="fa-solid fa-lock text-gold mr-2"></i> Security Settings</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-bold mb-1 block opacity-80">Current Email</label>
+                    <input type="email" id="sec-email" readonly class="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none opacity-70 cursor-not-allowed">
+                </div>
+                <button onclick="sendPassReset()" class="w-full py-3 rounded-xl border-2 border-gold text-gold font-bold hover:bg-gold hover:text-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-key"></i> Send Password Reset Link
+                </button>
+                <button onclick="closeModal('securityModal')" class="w-full py-3 mt-2 text-sm opacity-60 hover:opacity-100 font-bold transition">Close</button>
+            </div>
         </div>
     </div>
 
     <div id="editProfileModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Edit Profile</h3>
-            <input type="text" placeholder="Update Username" class="w-full px-4 py-2 border rounded-lg mb-4 focus:outline-none focus:border-gold">
-            <button onclick="closeModal('editProfileModal')" class="btn-gold w-full py-2 rounded-lg font-bold">Save Changes</button>
-            <button onclick="closeModal('editProfileModal')" class="w-full mt-2 text-gray-500 text-sm py-2">Close</button>
+            <h3 class="text-2xl font-bold mb-6 text-center"><i class="fa-solid fa-user-pen text-gold mr-2"></i> Edit Profile</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-bold mb-1 block opacity-80">Display Name</label>
+                    <input type="text" id="edit-username" placeholder="Enter new username" class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-gold transition">
+                </div>
+                <button id="btn-save-profile" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg">Update Profile</button>
+                <button onclick="closeModal('editProfileModal')" class="w-full py-2 text-sm opacity-60 hover:opacity-100 font-bold transition">Cancel</button>
+            </div>
         </div>
     </div>
 
     <div id="referModal" class="modal-overlay">
         <div class="modal-content text-center">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Refer & Earn</h3>
-            <p class="text-gray-500 text-sm mb-4">Share this code to get 500 Credits.</p>
-            <div class="bg-gray-100 p-3 rounded-lg font-mono text-lg tracking-widest text-gray-700 mb-4 border border-dashed border-gray-300">ADI4U-99X</div>
-            <button onclick="closeModal('referModal')" class="btn-gold w-full py-2 rounded-lg font-bold">Copy Link</button>
-            <button onclick="closeModal('referModal')" class="w-full mt-2 text-gray-500 text-sm py-2">Close</button>
+            <div class="w-20 h-20 bg-gradient-to-tr from-yellow-100 to-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-yellow-200">
+                <i class="fa-solid fa-gift text-4xl text-gold"></i>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">Invite & Earn 500 CR</h3>
+            <p class="text-sm opacity-70 mb-6">Share your unique code. When friends sign up, you both get rewarded!</p>
+            <div class="relative mb-6">
+                <input type="text" id="referral-code" value="NXTGEN-ADI99" readonly class="w-full text-center py-4 rounded-xl bg-gray-100 dark:bg-gray-800 font-mono text-xl tracking-widest font-bold border-2 border-dashed border-gold outline-none">
+            </div>
+            <button onclick="copyReferral()" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2"><i class="fa-regular fa-copy"></i> Copy Code</button>
+            <button onclick="closeModal('referModal')" class="mt-4 text-sm opacity-60 hover:opacity-100 font-bold">Close</button>
         </div>
     </div>
 
-    <div class="pt-32 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-        <div class="inline-block bg-yellow-50 text-gold px-4 py-1.5 rounded-full text-sm font-bold mb-4 border border-yellow-200">
-            <i class="fa-solid fa-bolt mr-1"></i> Premium Library
+    <div id="earnCreditsModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <i class="fa-solid fa-circle-play text-6xl text-gold mb-4 animate-pulse"></i>
+            <h3 class="text-2xl font-bold mb-2">Watch & Earn</h3>
+            <p class="text-sm opacity-70 mb-6">Watch a quick sponsor video to instantly claim <span class="font-bold text-gold">100 Credits</span>.</p>
+            <button id="btn-watch-ad" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> Play Video
+            </button>
+            <button onclick="closeModal('earnCreditsModal')" class="mt-4 text-sm opacity-60 hover:opacity-100 font-bold">Cancel</button>
         </div>
-        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">Unlock Digital Excellence</h2>
-        <p class="text-gray-500 max-w-2xl mx-auto text-lg">Browse categories. Exploring is free. Use credits only when you are ready to download the asset.</p>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="cards-container">
-            </div>
+    <div class="pt-36 pb-12 px-4 max-w-7xl mx-auto text-center relative z-10">
+        <div class="inline-block bg-yellow-50 dark:bg-gray-800 text-gold px-5 py-2 rounded-full text-sm font-extrabold mb-6 border border-yellow-200 shadow-sm animate-bounce">
+            <i class="fa-solid fa-bolt mr-1"></i> The Premium Vault
+        </div>
+        <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">Unlock Digital <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFDF73]">Excellence</span></h2>
+        <p class="opacity-70 max-w-2xl mx-auto text-lg font-medium mb-10">Browse exclusive categories. Exploring is completely free. Credits are only deducted upon asset download.</p>
     </div>
 
-    <footer class="bg-white border-t border-gray-200 pt-12 pb-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap justify-between items-center mb-8 gap-4">
-                <div class="text-2xl font-bold text-gray-800">NextGen<span class="text-gold">Adi4U</span></div>
-                
-                <a href="#" class="flex items-center gap-2 bg-gradient-to-r from-[#D4AF37] to-[#FFDF73] text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform">
-                    <i class="fa-solid fa-headset text-xl"></i> 24/7 Premium Support
-                </a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="cards-container">
             </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-medium text-gray-500 mb-8">
-                <a href="#" class="hover:text-gold transition">Report Link</a>
-                <a href="#" class="hover:text-gold transition">FAQ</a>
-                <a href="#" class="hover:text-gold transition">About Us</a>
-                <a href="#" class="hover:text-gold transition">Rules & Regulations</a>
-                <a href="#" class="hover:text-gold transition">Privacy Policy</a>
-                <a href="#" class="hover:text-gold transition">Advertising</a>
-                <a href="#" class="hover:text-gold transition">Terms of Service</a>
-                <a href="#" class="hover:text-gold transition">Disclaimer</a>
-            </div>
-            <div class="text-center text-gray-400 text-sm border-t border-gray-100 pt-8">
-                © 2026 NextGenAdi4U. Created by AS Solutions. All rights reserved.
-            </div>
-        </div>
-    </footer>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -243,106 +292,158 @@
 
         let currentUserDocRef = null;
         let currentCredits = 0;
+        let userEmail = "";
 
-        // Toast System
+        // --- THEME & BRIGHTNESS SYSTEM (LOCAL STORAGE) ---
+        const applyTheme = () => {
+            // Brightness
+            const savedBright = localStorage.getItem('adi4u_brightness') || 100;
+            document.documentElement.style.filter = `brightness(${savedBright}%)`;
+            document.getElementById('brightness-slider').value = savedBright;
+            document.getElementById('brightness-val').innerText = `${savedBright}%`;
+
+            // Dark Mode
+            const isDark = localStorage.getItem('adi4u_darkmode') === 'true';
+            if(isDark) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('btn-dark-mode').classList.add('border-gold');
+                document.getElementById('btn-light-mode').classList.remove('border-gold');
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.getElementById('btn-light-mode').classList.add('border-gold');
+                document.getElementById('btn-dark-mode').classList.remove('border-gold');
+            }
+        };
+        applyTheme(); // Apply immediately on load
+
+        // Brightness Control
+        document.getElementById('brightness-slider').addEventListener('input', (e) => {
+            const val = e.target.value;
+            document.documentElement.style.filter = `brightness(${val}%)`;
+            document.getElementById('brightness-val').innerText = `${val}%`;
+            localStorage.setItem('adi4u_brightness', val);
+        });
+
+        // Mode Toggles
+        document.getElementById('btn-dark-mode').addEventListener('click', () => {
+            localStorage.setItem('adi4u_darkmode', 'true'); applyTheme();
+        });
+        document.getElementById('btn-light-mode').addEventListener('click', () => {
+            localStorage.setItem('adi4u_darkmode', 'false'); applyTheme();
+        });
+
+        // --- GLOBAL UI FUNCTIONS ---
         window.showToast = function(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `custom-toast border-l-4 ${type === 'error' ? 'border-red-500' : 'border-gold'}`;
-            const icon = type === 'error' ? '<i class="fa-solid fa-circle-exclamation text-red-500 text-xl"></i>' : '<i class="fa-solid fa-circle-check text-gold text-xl"></i>';
-            toast.innerHTML = `${icon} <div><p class="text-sm font-bold text-gray-800">${message}</p></div>`;
+            toast.className = `custom-toast ${type === 'error' ? 'border-red-500' : 'border-gold'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation text-red-500' : 'fa-circle-check text-gold'} text-2xl"></i> 
+                               <span class="font-bold text-sm tracking-wide">${message}</span>`;
             container.appendChild(toast);
-            setTimeout(() => { toast.style.animation = 'fadeOut 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3000);
+            setTimeout(() => { toast.style.animation = 'fadeOutRight 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 3500);
         }
 
-        // Modal Controls
         window.openModal = function(modalId) {
             document.getElementById('profile-dropdown').classList.remove('show');
             document.getElementById(modalId).classList.add('active');
         }
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+        window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); }
+
+        // Copy Referral
+        window.copyReferral = function() {
+            const code = document.getElementById('referral-code').value;
+            navigator.clipboard.writeText(code);
+            showToast('Referral Code Copied!', 'success');
+            closeModal('referModal');
         }
 
-        // Dropdown Toggle
+        // Send Password Reset
+        window.sendPassReset = async function() {
+            try {
+                await sendPasswordResetEmail(auth, userEmail);
+                showToast('Reset link sent to your email!', 'success');
+                closeModal('securityModal');
+            } catch(e) { showToast('Error sending reset email.', 'error'); }
+        }
+
+        // Dropdown Logic
         document.getElementById('profile-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             document.getElementById('profile-dropdown').classList.toggle('show');
         });
         document.addEventListener('click', (e) => {
-            if(!e.target.closest('.modal-content')) { document.getElementById('profile-dropdown').classList.remove('show'); }
+            if(!e.target.closest('.modal-content') && !e.target.closest('.dropdown-menu')) {
+                document.getElementById('profile-dropdown').classList.remove('show');
+            }
         });
 
-        // Authentication Observer
+        // --- FIREBASE AUTH & DATA FETCHING ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
+                userEmail = user.email;
+                document.getElementById('sec-email').value = userEmail;
                 currentUserDocRef = doc(db, "users", user.uid);
-                fetchUserData();
+                
+                try {
+                    const userDoc = await getDoc(currentUserDocRef);
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        const displayName = userData.username || "User";
+                        document.getElementById('user-name').innerText = displayName;
+                        document.getElementById('edit-username').value = displayName;
+                        document.getElementById('user-initial').innerText = displayName.charAt(0).toUpperCase();
+                        
+                        currentCredits = userData.credits || 0;
+                        document.getElementById('user-credits').innerText = currentCredits;
+                        document.getElementById('mobile-credits').innerText = currentCredits;
+                    }
+                } catch (error) { console.error(error); }
             } else {
-                window.location.href = "index.html";
+                window.location.href = "index.html"; // Redirect if not logged in
             }
         });
 
-        async function fetchUserData() {
+        // --- UPDATE PROFILE (USERNAME) ---
+        document.getElementById('btn-save-profile').addEventListener('click', async () => {
+            const newName = document.getElementById('edit-username').value;
+            if(!newName) return showToast('Username cannot be empty', 'error');
             try {
-                const userDoc = await getDoc(currentUserDocRef);
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    const displayName = userData.username || "User";
-                    document.getElementById('user-name').innerText = displayName;
-                    document.getElementById('user-initial').innerText = displayName.charAt(0).toUpperCase();
-                    
-                    currentCredits = userData.credits || 0;
-                    document.getElementById('user-credits').innerText = currentCredits;
-                    document.getElementById('mobile-credits').innerText = currentCredits;
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        }
+                const btn = document.getElementById('btn-save-profile');
+                btn.innerText = "Saving..."; btn.disabled = true;
+                await updateDoc(currentUserDocRef, { username: newName });
+                document.getElementById('user-name').innerText = newName;
+                document.getElementById('user-initial').innerText = newName.charAt(0).toUpperCase();
+                showToast('Profile Updated Successfully!');
+                closeModal('editProfileModal');
+            } catch(e) { showToast('Update failed', 'error'); }
+            finally { document.getElementById('btn-save-profile').innerText = "Update Profile"; document.getElementById('btn-save-profile').disabled = false; }
+        });
 
-        // Earn Credits Logic (Watch Ad Simulation)
-        document.getElementById('btn-watch-ad').addEventListener('click', async () => {
+        // --- EARN CREDITS (AD SIMULATION) ---
+        document.getElementById('btn-watch-ad').addEventListener('click', () => {
             const btn = document.getElementById('btn-watch-ad');
-            const loader = document.getElementById('ad-loader');
-            
-            // UI Loading state
             btn.disabled = true;
-            btn.style.opacity = "0.8";
-            loader.style.display = "inline-block";
-            btn.childNodes[0].nodeValue = "Watching Ad... ";
-
-            // Simulate Ad Time (3 seconds)
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Playing Video...`;
+            
             setTimeout(async () => {
                 try {
-                    // Update Database
                     const newCredits = currentCredits + 100;
                     await updateDoc(currentUserDocRef, { credits: newCredits });
-                    
-                    // Update Local Variables and UI
                     currentCredits = newCredits;
                     document.getElementById('user-credits').innerText = currentCredits;
                     document.getElementById('mobile-credits').innerText = currentCredits;
                     
-                    // Reset UI
+                    showToast('🎉 +100 Credits added to your vault!');
                     closeModal('earnCreditsModal');
-                    showToast('100 Credits added successfully!', 'success');
-                    
-                } catch (error) {
-                    showToast('Error adding credits.', 'error');
-                } finally {
-                    btn.disabled = false;
-                    btn.style.opacity = "1";
-                    loader.style.display = "none";
-                    btn.childNodes[0].nodeValue = " Watch Ad Now ";
-                }
+                } catch (error) { showToast('Error rewarding credits.', 'error'); } 
+                finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-play"></i> Play Video`; }
             }, 3000);
         });
 
-        // Logout
+        // --- LOGOUT ---
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // Inject 9 Specific Categories
+        // --- HYPER-ANIMATED CARDS INJECTION ---
         const categories = [
             { name: "SoftWares", icon: "fa-laptop-code", desc: "Premium PC and Mac software setups.", link: "softwares.html" },
             { name: "Pc Games", icon: "fa-gamepad", desc: "AAA and Indie game setups for PC.", link: "pc_games.html" },
@@ -356,19 +457,21 @@
         ];
 
         const cardsContainer = document.getElementById('cards-container');
-        categories.forEach(cat => {
+        categories.forEach((cat, index) => {
+            // Calculate delay for staggered animation (0.1s gap between each card)
+            const delay = index * 0.1; 
             const cardHTML = `
-                <div class="premium-card p-6 flex flex-col justify-between h-full bg-white group">
+                <div class="premium-card p-8 flex flex-col justify-between h-full group" style="animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: ${delay}s;">
                     <div>
-                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-50 to-white flex items-center justify-center mb-5 border border-yellow-100 shadow-sm group-hover:scale-110 transition duration-300">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-100 to-white dark:from-gray-700 dark:to-gray-800 flex items-center justify-center mb-6 border border-yellow-200 dark:border-gray-600 shadow-sm group-hover:-translate-y-2 group-hover:rotate-3 transition duration-400">
                             <i class="fa-solid ${cat.icon} text-3xl text-gold"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">${cat.name}</h3>
-                        <p class="text-sm text-gray-500 mb-6 font-medium">${cat.desc}</p>
+                        <h3 class="text-2xl font-extrabold mb-3 tracking-tight">${cat.name}</h3>
+                        <p class="text-sm opacity-70 mb-8 font-medium leading-relaxed">${cat.desc}</p>
                     </div>
                     <div class="mt-auto">
-                        <button onclick="window.location.href='${cat.link}'" class="w-full btn-gold py-3 rounded-xl font-bold tracking-wide flex justify-center items-center gap-2">
-                            Explore <i class="fa-solid fa-arrow-right text-sm"></i>
+                        <button onclick="window.location.href='${cat.link}'" class="w-full btn-gold py-3.5 rounded-xl font-bold tracking-wider flex justify-center items-center gap-3 shadow-md">
+                            Explore Vault <i class="fa-solid fa-arrow-right-long text-sm group-hover:translate-x-2 transition"></i>
                         </button>
                     </div>
                 </div>
