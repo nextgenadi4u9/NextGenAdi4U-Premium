@@ -16,6 +16,8 @@
             --card-bg: #ffffff;
             --nav-bg: rgba(255, 255, 255, 0.95);
             --border-color: rgba(212, 175, 55, 0.1);
+            --footer-bg: #ffffff;
+            --footer-border: #e5e7eb;
         }
 
         /* Dark Mode Variables */
@@ -26,6 +28,8 @@
             --card-bg: #1e1e1e;
             --nav-bg: rgba(30, 30, 30, 0.95);
             --border-color: rgba(212, 175, 55, 0.3);
+            --footer-bg: #1a1a1a;
+            --footer-border: #333333;
         }
 
         body {
@@ -34,7 +38,12 @@
             color: var(--text-main);
             overflow-x: hidden;
             transition: background-color 0.4s ease, color 0.4s ease, filter 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
+
+        main { flex: 1; }
 
         /* Golden Theme Elements */
         .text-gold { color: #D4AF37; }
@@ -54,19 +63,17 @@
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
             cursor: pointer;
-            opacity: 0; /* For animation */
-            transform: translateY(30px); /* For animation */
+            opacity: 0; 
+            transform: translateY(30px); 
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
         
-        /* Hyper-Animation for Cards Hover */
         .premium-card:hover {
             transform: translateY(-8px) scale(1.02) !important;
             border-color: rgba(212, 175, 55, 0.6);
             box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
         }
 
-        /* Entrance Animation Keyframes */
         @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
         }
@@ -132,6 +139,13 @@
             color: var(--text-main);
         }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Footer specific */
+        footer {
+            background-color: var(--footer-bg);
+            border-top: 1px solid var(--footer-border);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
+        }
     </style>
 </head>
 <body>
@@ -146,7 +160,7 @@
                 </div>
 
                 <div class="flex items-center space-x-3 sm:space-x-6">
-                    <div class="hidden sm:flex items-center bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full shadow-sm text-gray-800">
+                    <div onclick="openModal('earnCreditsModal')" class="hidden sm:flex items-center bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 px-4 py-2 rounded-full shadow-sm text-gray-800 dark:text-gray-200 cursor-pointer hover:bg-yellow-100 dark:hover:bg-gray-700 transition">
                         <i class="fa-solid fa-coins text-gold mr-2 animate-bounce"></i>
                         <span class="font-bold" id="user-credits">...</span>
                         <span class="text-gray-500 text-sm ml-1 font-medium">CR</span>
@@ -154,7 +168,7 @@
 
                     <div class="relative">
                         <button id="profile-btn" class="flex items-center focus:outline-none">
-                            <div class="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center font-bold shadow-lg border-2 border-white transition transform hover:scale-105">
+                            <div class="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center font-bold shadow-lg border-2 border-white dark:border-gray-800 transition transform hover:scale-105">
                                 <span id="user-initial">U</span>
                             </div>
                             <span class="ml-2 font-medium hidden md:block" id="user-name">User</span>
@@ -162,17 +176,19 @@
                         </button>
 
                         <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-4 w-64 rounded-2xl shadow-2xl py-3 z-50">
-                            <div class="px-4 py-3 border-b border-gray-100 sm:hidden">
-                                <p class="text-sm opacity-70">Balance</p>
+                            <div onclick="openModal('earnCreditsModal')" class="px-5 py-3 border-b border-gray-100 dark:border-gray-700 sm:hidden cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                <p class="text-xs opacity-70 font-bold text-green-500"><i class="fa-solid fa-play mr-1"></i> Tap to Earn</p>
                                 <p class="text-lg font-bold text-gold"><span id="mobile-credits">0</span> CR</p>
                             </div>
-                            <a href="#" onclick="openModal('editProfileModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-regular fa-user mr-3 text-gold"></i> Edit Profile</a>
-                            <a href="#" onclick="openModal('earnCreditsModal')" class="dropdown-item block px-5 py-3 text-sm font-bold transition"><i class="fa-solid fa-play mr-3 text-green-500"></i> Earn Free Credits</a>
-                            <a href="#" onclick="openModal('referModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-users-viewfinder mr-3 text-gold"></i> Refer & Earn</a>
-                            <a href="#" onclick="openModal('customizeModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-palette mr-3 text-gold"></i> Customize Theme</a>
-                            <a href="#" onclick="openModal('securityModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-shield-halved mr-3 text-gold"></i> Security</a>
-                            <div class="border-t border-gray-100 mt-2 pt-2">
-                                <button id="btn-logout" class="w-full text-left px-5 py-3 text-sm text-red-500 hover:bg-red-50 hover:text-red-600 transition font-bold rounded-b-xl"><i class="fa-solid fa-power-off mr-3"></i> Secure Logout</button>
+                            
+                            <a href="#" onclick="openModal('editProfileModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-user-pen w-5 text-center mr-2 text-gold"></i> Edit Profile</a>
+                            <a href="#" onclick="openModal('earnCreditsModal')" class="dropdown-item block px-5 py-3 text-sm font-bold transition"><i class="fa-solid fa-video w-5 text-center mr-2 text-green-500"></i> Earn Credits</a>
+                            <a href="#" onclick="openModal('referModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-gift w-5 text-center mr-2 text-gold"></i> Refer & Earn</a>
+                            <a href="#" onclick="openModal('customizeModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-palette w-5 text-center mr-2 text-gold"></i> Customize Theme</a>
+                            <a href="#" onclick="openModal('securityModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-shield-halved w-5 text-center mr-2 text-gold"></i> Security</a>
+                            
+                            <div class="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
+                                <button id="btn-logout" class="w-full text-left px-5 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition font-bold rounded-b-xl"><i class="fa-solid fa-power-off w-5 text-center mr-2"></i> Secure Logout</button>
                             </div>
                         </div>
                     </div>
@@ -188,8 +204,8 @@
             <div class="mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                 <p class="text-sm font-bold mb-3 text-left">Mode Selection</p>
                 <div class="flex justify-between gap-4">
-                    <button id="btn-light-mode" class="flex-1 py-2 rounded-lg border-2 border-gold font-bold text-gray-800 bg-white shadow-sm"><i class="fa-solid fa-sun mr-1"></i> Light</button>
-                    <button id="btn-dark-mode" class="flex-1 py-2 rounded-lg border-2 border-transparent bg-gray-800 text-white font-bold hover:border-gold transition"><i class="fa-solid fa-moon mr-1 text-gold"></i> Dark</button>
+                    <button id="btn-light-mode" class="flex-1 py-2 rounded-lg border-2 border-gold font-bold text-gray-800 bg-white shadow-sm transition"><i class="fa-solid fa-sun mr-1 text-yellow-500"></i> Light</button>
+                    <button id="btn-dark-mode" class="flex-1 py-2 rounded-lg border-2 border-transparent bg-gray-800 text-white font-bold hover:border-gold transition"><i class="fa-solid fa-moon mr-1 text-gray-300"></i> Dark</button>
                 </div>
             </div>
 
@@ -208,9 +224,9 @@
             <div class="space-y-4">
                 <div>
                     <label class="text-sm font-bold mb-1 block opacity-80">Current Email</label>
-                    <input type="email" id="sec-email" readonly class="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none opacity-70 cursor-not-allowed">
+                    <input type="email" id="sec-email" readonly class="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none opacity-70 cursor-not-allowed text-gray-600 dark:text-gray-300">
                 </div>
-                <button onclick="sendPassReset()" class="w-full py-3 rounded-xl border-2 border-gold text-gold font-bold hover:bg-gold hover:text-white transition flex items-center justify-center gap-2">
+                <button onclick="sendPassReset()" class="w-full py-3 rounded-xl border-2 border-gold text-gold font-bold hover:bg-gold hover:text-gray-900 transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-key"></i> Send Password Reset Link
                 </button>
                 <button onclick="closeModal('securityModal')" class="w-full py-3 mt-2 text-sm opacity-60 hover:opacity-100 font-bold transition">Close</button>
@@ -224,7 +240,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="text-sm font-bold mb-1 block opacity-80">Display Name</label>
-                    <input type="text" id="edit-username" placeholder="Enter new username" class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-gold transition">
+                    <input type="text" id="edit-username" placeholder="Enter new username" class="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:outline-none focus:border-gold transition text-gray-800 dark:text-white">
                 </div>
                 <button id="btn-save-profile" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg">Update Profile</button>
                 <button onclick="closeModal('editProfileModal')" class="w-full py-2 text-sm opacity-60 hover:opacity-100 font-bold transition">Cancel</button>
@@ -234,13 +250,13 @@
 
     <div id="referModal" class="modal-overlay">
         <div class="modal-content text-center">
-            <div class="w-20 h-20 bg-gradient-to-tr from-yellow-100 to-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-yellow-200">
+            <div class="w-20 h-20 bg-gradient-to-tr from-yellow-100 to-white dark:from-yellow-900 dark:to-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner border border-yellow-200 dark:border-yellow-700">
                 <i class="fa-solid fa-gift text-4xl text-gold"></i>
             </div>
             <h3 class="text-2xl font-bold mb-2">Invite & Earn 500 CR</h3>
             <p class="text-sm opacity-70 mb-6">Share your unique code. When friends sign up, you both get rewarded!</p>
             <div class="relative mb-6">
-                <input type="text" id="referral-code" value="NXTGEN-ADI99" readonly class="w-full text-center py-4 rounded-xl bg-gray-100 dark:bg-gray-800 font-mono text-xl tracking-widest font-bold border-2 border-dashed border-gold outline-none">
+                <input type="text" id="referral-code" value="NXTGEN-ADI99" readonly class="w-full text-center py-4 rounded-xl bg-gray-100 dark:bg-gray-800 font-mono text-xl tracking-widest font-bold border-2 border-dashed border-gold outline-none text-gray-800 dark:text-white">
             </div>
             <button onclick="copyReferral()" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2"><i class="fa-regular fa-copy"></i> Copy Code</button>
             <button onclick="closeModal('referModal')" class="mt-4 text-sm opacity-60 hover:opacity-100 font-bold">Close</button>
@@ -251,7 +267,7 @@
         <div class="modal-content text-center">
             <i class="fa-solid fa-circle-play text-6xl text-gold mb-4 animate-pulse"></i>
             <h3 class="text-2xl font-bold mb-2">Watch & Earn</h3>
-            <p class="text-sm opacity-70 mb-6">Watch a quick sponsor video to instantly claim <span class="font-bold text-gold">100 Credits</span>.</p>
+            <p class="text-sm opacity-70 mb-6">Watch a quick sponsor video to instantly claim <span class="font-bold text-gold">100 Credits</span>. System limits 1 ad per click.</p>
             <button id="btn-watch-ad" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2">
                 <i class="fa-solid fa-play"></i> Play Video
             </button>
@@ -259,18 +275,47 @@
         </div>
     </div>
 
-    <div class="pt-36 pb-12 px-4 max-w-7xl mx-auto text-center relative z-10">
-        <div class="inline-block bg-yellow-50 dark:bg-gray-800 text-gold px-5 py-2 rounded-full text-sm font-extrabold mb-6 border border-yellow-200 shadow-sm animate-bounce">
-            <i class="fa-solid fa-bolt mr-1"></i> The Premium Vault
-        </div>
-        <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">Unlock Digital <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFDF73]">Excellence</span></h2>
-        <p class="opacity-70 max-w-2xl mx-auto text-lg font-medium mb-10">Browse exclusive categories. Exploring is completely free. Credits are only deducted upon asset download.</p>
-    </div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="cards-container">
+    <main>
+        <div class="pt-36 pb-12 px-4 max-w-7xl mx-auto text-center relative z-10">
+            <div class="inline-block bg-yellow-50 dark:bg-gray-800 text-gold px-5 py-2 rounded-full text-sm font-extrabold mb-6 border border-yellow-200 dark:border-gray-700 shadow-sm animate-bounce">
+                <i class="fa-solid fa-bolt mr-1"></i> The Premium Vault
             </div>
-    </div>
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">Unlock Digital <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFDF73]">Excellence</span></h2>
+            <p class="opacity-70 max-w-2xl mx-auto text-lg font-medium mb-10">Browse exclusive categories. Exploring is completely free. Credits are only deducted upon asset download.</p>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="cards-container">
+                </div>
+        </div>
+    </main>
+
+    <footer class="pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+                <div class="text-3xl font-extrabold tracking-tight">NextGen<span class="text-gold">Adi4U</span></div>
+                
+                <a href="#" class="flex items-center gap-3 bg-gradient-to-r from-[#D4AF37] to-[#FFDF73] text-gray-900 px-8 py-4 rounded-2xl font-extrabold shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform border border-yellow-300">
+                    <i class="fa-solid fa-headset text-2xl"></i> 24/7 Premium Support
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 text-sm font-bold opacity-70 mb-12 text-center md:text-left">
+                <a href="#" class="hover:text-gold transition">Report Link</a>
+                <a href="#" class="hover:text-gold transition">FAQ</a>
+                <a href="#" class="hover:text-gold transition">About Us</a>
+                <a href="#" class="hover:text-gold transition">Rules & Regs</a>
+                <a href="#" class="hover:text-gold transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gold transition">Advertising</a>
+                <a href="#" class="hover:text-gold transition">Terms of Service</a>
+                <a href="#" class="hover:text-gold transition">Disclaimer</a>
+            </div>
+            
+            <div class="text-center opacity-50 text-sm border-t border-gray-200 dark:border-gray-800 pt-8 font-medium">
+                © 2026 NextGenAdi4U. Created by AS Solutions. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -294,29 +339,28 @@
         let currentCredits = 0;
         let userEmail = "";
 
-        // --- THEME & BRIGHTNESS SYSTEM (LOCAL STORAGE) ---
+        // --- THEME & BRIGHTNESS SYSTEM ---
         const applyTheme = () => {
-            // Brightness
             const savedBright = localStorage.getItem('adi4u_brightness') || 100;
             document.documentElement.style.filter = `brightness(${savedBright}%)`;
             document.getElementById('brightness-slider').value = savedBright;
             document.getElementById('brightness-val').innerText = `${savedBright}%`;
 
-            // Dark Mode
             const isDark = localStorage.getItem('adi4u_darkmode') === 'true';
             if(isDark) {
                 document.body.classList.add('dark-theme');
                 document.getElementById('btn-dark-mode').classList.add('border-gold');
                 document.getElementById('btn-light-mode').classList.remove('border-gold');
+                document.getElementById('btn-dark-mode').classList.remove('text-gray-300');
+                document.getElementById('btn-dark-mode').classList.add('text-gold');
             } else {
                 document.body.classList.remove('dark-theme');
                 document.getElementById('btn-light-mode').classList.add('border-gold');
                 document.getElementById('btn-dark-mode').classList.remove('border-gold');
             }
         };
-        applyTheme(); // Apply immediately on load
+        applyTheme();
 
-        // Brightness Control
         document.getElementById('brightness-slider').addEventListener('input', (e) => {
             const val = e.target.value;
             document.documentElement.style.filter = `brightness(${val}%)`;
@@ -324,7 +368,6 @@
             localStorage.setItem('adi4u_brightness', val);
         });
 
-        // Mode Toggles
         document.getElementById('btn-dark-mode').addEventListener('click', () => {
             localStorage.setItem('adi4u_darkmode', 'true'); applyTheme();
         });
@@ -349,7 +392,6 @@
         }
         window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
-        // Copy Referral
         window.copyReferral = function() {
             const code = document.getElementById('referral-code').value;
             navigator.clipboard.writeText(code);
@@ -357,7 +399,6 @@
             closeModal('referModal');
         }
 
-        // Send Password Reset
         window.sendPassReset = async function() {
             try {
                 await sendPasswordResetEmail(auth, userEmail);
@@ -366,7 +407,6 @@
             } catch(e) { showToast('Error sending reset email.', 'error'); }
         }
 
-        // Dropdown Logic
         document.getElementById('profile-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             document.getElementById('profile-dropdown').classList.toggle('show');
@@ -377,7 +417,7 @@
             }
         });
 
-        // --- FIREBASE AUTH & DATA FETCHING ---
+        // --- FIREBASE AUTH ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 userEmail = user.email;
@@ -399,11 +439,11 @@
                     }
                 } catch (error) { console.error(error); }
             } else {
-                window.location.href = "index.html"; // Redirect if not logged in
+                window.location.href = "index.html"; 
             }
         });
 
-        // --- UPDATE PROFILE (USERNAME) ---
+        // --- UPDATE PROFILE ---
         document.getElementById('btn-save-profile').addEventListener('click', async () => {
             const newName = document.getElementById('edit-username').value;
             if(!newName) return showToast('Username cannot be empty', 'error');
@@ -419,7 +459,7 @@
             finally { document.getElementById('btn-save-profile').innerText = "Update Profile"; document.getElementById('btn-save-profile').disabled = false; }
         });
 
-        // --- EARN CREDITS (AD SIMULATION) ---
+        // --- EARN CREDITS SYSTEM (1 AD = 100 CR) ---
         document.getElementById('btn-watch-ad').addEventListener('click', () => {
             const btn = document.getElementById('btn-watch-ad');
             btn.disabled = true;
@@ -440,10 +480,9 @@
             }, 3000);
         });
 
-        // --- LOGOUT ---
         document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
 
-        // --- HYPER-ANIMATED CARDS INJECTION ---
+        // --- CARDS INJECTION ---
         const categories = [
             { name: "SoftWares", icon: "fa-laptop-code", desc: "Premium PC and Mac software setups.", link: "softwares.html" },
             { name: "Pc Games", icon: "fa-gamepad", desc: "AAA and Indie game setups for PC.", link: "pc_games.html" },
@@ -458,7 +497,6 @@
 
         const cardsContainer = document.getElementById('cards-container');
         categories.forEach((cat, index) => {
-            // Calculate delay for staggered animation (0.1s gap between each card)
             const delay = index * 0.1; 
             const cardHTML = `
                 <div class="premium-card p-8 flex flex-col justify-between h-full group" style="animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: ${delay}s;">
