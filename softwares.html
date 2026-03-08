@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Softwares - NextGenAdi4U</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-color: #fdfbfb;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(212, 175, 55, 0.1);
+            --footer-bg: #ffffff;
+            --footer-border: #e5e7eb;
+        }
+
+        .dark-theme {
+            --bg-color: #121212;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --card-bg: #1e1e1e;
+            --nav-bg: rgba(30, 30, 30, 0.95);
+            --border-color: rgba(212, 175, 55, 0.3);
+            --footer-bg: #1a1a1a;
+            --footer-border: #333333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease, filter 0.3s ease;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        main { flex: 1; }
+
+        .text-gold { color: #D4AF37; }
+        .bg-gold { background-color: #D4AF37; }
+        .border-gold { border-color: #D4AF37; }
+        
+        .glass-nav {
+            background: var(--nav-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); transition: all 0.4s ease;
+        }
+
+        /* Software Card Styles */
+        .software-card {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.4s ease;
+            opacity: 0; transform: translateY(20px); animation: fadeInUp 0.6s ease forwards;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .software-card:hover { border-color: rgba(212, 175, 55, 0.5); box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15); }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        .btn-gold { background: linear-gradient(45deg, #D4AF37, #FFDF73); color: #111; transition: all 0.3s ease; }
+        .btn-gold:hover { box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); transform: translateY(-2px); }
+        .btn-gold:disabled { background: #ccc; color: #666; box-shadow: none; transform: none; cursor: not-allowed; }
+
+        /* Accordion Info Box */
+        .seo-box {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            background: rgba(212, 175, 55, 0.03); border-top: 1px solid transparent;
+        }
+        .seo-box.expanded { max-height: 500px; padding: 15px; border-top-color: var(--border-color); }
+        .seo-box ul { list-style-type: none; padding-left: 0; margin-top: 8px; }
+        .seo-box ul li::before { content: "✓"; color: #D4AF37; font-weight: bold; margin-right: 8px; }
+
+        /* Modals, Dropdowns, Toast (Same as Dashboard) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(6px); z-index: 100; display: none; opacity: 0; transition: opacity 0.3s ease; align-items: center; justify-content: center; padding: 15px; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--card-bg); width: 100%; max-w: 420px; border-radius: 24px; padding: 28px; border: 1px solid var(--border-color); box-shadow: 0 25px 60px rgba(0,0,0,0.3); transform: scale(0.7) translateY(20px); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .dropdown-menu { background: var(--card-bg); border: 1px solid var(--border-color); display: none; opacity: 0; transform: translateY(-15px) scale(0.95); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: top right; }
+        .dropdown-menu.show { display: block; opacity: 1; transform: translateY(0) scale(1); }
+        .dropdown-item { color: var(--text-main); }
+        .dropdown-item:hover { background-color: rgba(212, 175, 55, 0.1); color: #D4AF37; }
+        .range-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 5px; background: #ddd; outline: none; }
+        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #D4AF37; cursor: pointer; }
+        #toast-container { position: fixed; top: 90px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .custom-toast { background: var(--card-bg); border-left: 4px solid #D4AF37; padding: 16px 24px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 12px; animation: slideInRight 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; color: var(--text-main); }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        footer { background-color: var(--footer-bg); border-top: 1px solid var(--footer-border); transition: background-color 0.4s ease, border-color 0.4s ease; }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <nav class="glass-nav fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.location.href='dashboard.html'">
+                    <i class="fa-solid fa-arrow-left text-xl mr-4 hover:text-gold transition"></i>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">NextGen<span class="text-gold">Adi4U</span></h1>
+                </div>
+
+                <div class="flex items-center space-x-3 sm:space-x-6">
+                    <div onclick="openModal('earnCreditsModal')" class="hidden sm:flex items-center bg-yellow-50 dark:bg-gray-800 border border-yellow-200 dark:border-gray-700 px-4 py-2 rounded-full shadow-sm text-gray-800 dark:text-gray-200 cursor-pointer hover:bg-yellow-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-coins text-gold mr-2 animate-bounce"></i>
+                        <span class="font-bold" id="user-credits">...</span>
+                        <span class="text-gray-500 text-sm ml-1 font-medium">CR</span>
+                    </div>
+
+                    <div class="relative">
+                        <button id="profile-btn" class="flex items-center focus:outline-none">
+                            <div class="w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center font-bold shadow-lg border-2 border-white dark:border-gray-800 transition transform hover:scale-105">
+                                <span id="user-initial">U</span>
+                            </div>
+                            <span class="ml-2 font-medium hidden md:block" id="user-name">User</span>
+                            <i class="fa-solid fa-chevron-down ml-2 text-sm text-gold"></i>
+                        </button>
+
+                        <div id="profile-dropdown" class="dropdown-menu absolute right-0 mt-4 w-64 rounded-2xl shadow-2xl py-3 z-50">
+                            <div onclick="openModal('earnCreditsModal')" class="px-5 py-3 border-b border-gray-100 dark:border-gray-700 sm:hidden cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+                                <p class="text-xs opacity-70 font-bold text-green-500"><i class="fa-solid fa-play mr-1"></i> Tap to Earn</p>
+                                <p class="text-lg font-bold text-gold"><span id="mobile-credits">0</span> CR</p>
+                            </div>
+                            <a href="#" onclick="window.location.href='dashboard.html'" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-house w-5 text-center mr-2 text-gold"></i> Dashboard</a>
+                            <a href="#" onclick="openModal('earnCreditsModal')" class="dropdown-item block px-5 py-3 text-sm font-bold transition"><i class="fa-solid fa-video w-5 text-center mr-2 text-green-500"></i> Earn Credits</a>
+                            <a href="#" onclick="openModal('customizeModal')" class="dropdown-item block px-5 py-3 text-sm font-medium transition"><i class="fa-solid fa-palette w-5 text-center mr-2 text-gold"></i> Customize Theme</a>
+                            <div class="border-t border-gray-100 dark:border-gray-700 mt-2 pt-2">
+                                <button id="btn-logout" class="w-full text-left px-5 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition font-bold rounded-b-xl"><i class="fa-solid fa-power-off w-5 text-center mr-2"></i> Secure Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="customizeModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <h3 class="text-2xl font-bold mb-6"><i class="fa-solid fa-palette text-gold mr-2"></i> Theme & Display</h3>
+            <div class="mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                <p class="text-sm font-bold mb-3 text-left">Mode Selection</p>
+                <div class="flex justify-between gap-4">
+                    <button id="btn-light-mode" class="flex-1 py-2 rounded-lg border-2 border-gold font-bold text-gray-800 bg-white shadow-sm transition"><i class="fa-solid fa-sun mr-1 text-yellow-500"></i> Light</button>
+                    <button id="btn-dark-mode" class="flex-1 py-2 rounded-lg border-2 border-transparent bg-gray-800 text-white font-bold hover:border-gold transition"><i class="fa-solid fa-moon mr-1 text-gray-300"></i> Dark</button>
+                </div>
+            </div>
+            <div class="mb-6 bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 text-left">
+                <p class="text-sm font-bold mb-2 flex justify-between"><span>Display Brightness</span> <span id="brightness-val" class="text-gold">100%</span></p>
+                <input type="range" id="brightness-slider" class="range-slider mt-2" min="50" max="120" value="100">
+            </div>
+            <button onclick="closeModal('customizeModal')" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg">Save Preferences</button>
+        </div>
+    </div>
+
+    <div id="earnCreditsModal" class="modal-overlay">
+        <div class="modal-content text-center">
+            <i class="fa-solid fa-circle-play text-6xl text-gold mb-4 animate-pulse"></i>
+            <h3 class="text-2xl font-bold mb-2">Watch & Earn</h3>
+            <p class="text-sm opacity-70 mb-6">Watch a quick sponsor video to instantly claim <span class="font-bold text-gold">100 Credits</span>.</p>
+            <button id="btn-watch-ad" class="btn-gold w-full py-3 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-play"></i> Play Video
+            </button>
+            <button onclick="closeModal('earnCreditsModal')" class="mt-4 text-sm opacity-60 hover:opacity-100 font-bold">Cancel</button>
+        </div>
+    </div>
+
+    <main>
+        <div class="pt-36 pb-8 px-4 max-w-7xl mx-auto text-center relative z-10">
+            <h2 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Premium <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#FFDF73]">Softwares</span></h2>
+            <p class="opacity-70 max-w-xl mx-auto text-lg font-medium mb-4">Cracked • Full Version • Pre-Activated</p>
+            <div class="inline-block bg-gray-100 dark:bg-gray-800 px-6 py-2 rounded-full border border-gray-200 dark:border-gray-700">
+                <i class="fa-solid fa-unlock-keyhole text-gold mr-2"></i><span class="font-bold text-sm">Download Cost: 1000 CR per software</span>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="software-container">
+                </div>
+        </div>
+    </main>
+
+    <footer class="pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+                <div class="text-3xl font-extrabold tracking-tight">NextGen<span class="text-gold">Adi4U</span></div>
+                <a href="#" class="flex items-center gap-3 bg-gradient-to-r from-[#D4AF37] to-[#FFDF73] text-gray-900 px-8 py-4 rounded-2xl font-extrabold shadow-lg hover:shadow-xl hover:-translate-y-1 transition transform border border-yellow-300">
+                    <i class="fa-solid fa-headset text-2xl"></i> 24/7 Premium Support
+                </a>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 text-sm font-bold opacity-70 mb-12 text-center md:text-left">
+                <a href="#" class="hover:text-gold transition">Report Link</a>
+                <a href="#" class="hover:text-gold transition">FAQ</a>
+                <a href="#" class="hover:text-gold transition">About Us</a>
+                <a href="#" class="hover:text-gold transition">Rules & Regs</a>
+                <a href="#" class="hover:text-gold transition">Privacy Policy</a>
+                <a href="#" class="hover:text-gold transition">Advertising</a>
+                <a href="#" class="hover:text-gold transition">Terms of Service</a>
+                <a href="#" class="hover:text-gold transition">Disclaimer</a>
+            </div>
+            <div class="text-center opacity-50 text-sm border-t border-gray-200 dark:border-gray-800 pt-8 font-medium">
+                © 2026 NextGenAdi4U. Created by AS Solutions. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9s-ys9UlaIl9m_h9_7N28q5-kQ4LzS5Y",
+            authDomain: "digital-9a872.firebaseapp.com",
+            projectId: "digital-9a872",
+            storageBucket: "digital-9a872.firebasestorage.app",
+            messagingSenderId: "878552810082",
+            appId: "1:878552810082:web:d7811b6eebd13b6c45873b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUserDocRef = null;
+        let currentCredits = 0;
+
+        // --- THEME SYSTEM ---
+        const applyTheme = () => {
+            const savedBright = localStorage.getItem('adi4u_brightness') || 100;
+            document.documentElement.style.filter = `brightness(${savedBright}%)`;
+            document.getElementById('brightness-slider').value = savedBright;
+            document.getElementById('brightness-val').innerText = `${savedBright}%`;
+
+            const isDark = localStorage.getItem('adi4u_darkmode') === 'true';
+            if(isDark) {
+                document.body.classList.add('dark-theme');
+                document.getElementById('btn-dark-mode').classList.add('border-gold');
+                document.getElementById('btn-light-mode').classList.remove('border-gold');
+                document.getElementById('btn-dark-mode').classList.remove('text-gray-300');
+                document.getElementById('btn-dark-mode').classList.add('text-gold');
+            } else {
+                document.body.classList.remove('dark-theme');
+                document.getElementById('btn-light-mode').classList.add('border-gold');
+                document.getElementById('btn-dark-mode').classList.remove('border-gold');
+            }
+        };
+        applyTheme();
+
+        document.getElementById('brightness-slider').addEventListener('input', (e) => {
+            const val = e.target.value;
+            document.documentElement.style.filter = `brightness(${val}%)`;
+            document.getElementById('brightness-val').innerText = `${val}%`;
+            localStorage.setItem('adi4u_brightness', val);
+        });
+        document.getElementById('btn-dark-mode').addEventListener('click', () => { localStorage.setItem('adi4u_darkmode', 'true'); applyTheme(); });
+        document.getElementById('btn-light-mode').addEventListener('click', () => { localStorage.setItem('adi4u_darkmode', 'false'); applyTheme(); });
+
+        // --- UI FUNCTIONS ---
+        window.showToast = function(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type === 'error' ? 'border-red-500' : 'border-gold'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-triangle-exclamation text-red-500' : 'fa-circle-check text-gold'} text-2xl"></i> 
+                               <span class="font-bold text-sm tracking-wide">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.animation = 'fadeOutRight 0.4s forwards'; setTimeout(() => toast.remove(), 400); }, 4000);
+        }
+
+        window.openModal = function(modalId) {
+            document.getElementById('profile-dropdown').classList.remove('show');
+            document.getElementById(modalId).classList.add('active');
+        }
+        window.closeModal = function(modalId) { document.getElementById(modalId).classList.remove('active'); }
+
+        document.getElementById('profile-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('profile-dropdown').classList.toggle('show');
+        });
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('.modal-content') && !e.target.closest('.dropdown-menu')) {
+                document.getElementById('profile-dropdown').classList.remove('show');
+            }
+        });
+
+        // --- FIREBASE AUTH ---
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUserDocRef = doc(db, "users", user.uid);
+                try {
+                    const userDoc = await getDoc(currentUserDocRef);
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        const displayName = userData.username || "User";
+                        document.getElementById('user-name').innerText = displayName;
+                        document.getElementById('user-initial').innerText = displayName.charAt(0).toUpperCase();
+                        currentCredits = userData.credits || 0;
+                        document.getElementById('user-credits').innerText = currentCredits;
+                        document.getElementById('mobile-credits').innerText = currentCredits;
+                    }
+                } catch (error) { console.error(error); }
+            } else {
+                window.location.href = "index.html"; 
+            }
+        });
+
+        // --- EARN CREDITS ---
+        document.getElementById('btn-watch-ad').addEventListener('click', () => {
+            const btn = document.getElementById('btn-watch-ad');
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Playing Video...`;
+            setTimeout(async () => {
+                try {
+                    const newCredits = currentCredits + 100;
+                    await updateDoc(currentUserDocRef, { credits: newCredits });
+                    currentCredits = newCredits;
+                    document.getElementById('user-credits').innerText = currentCredits;
+                    document.getElementById('mobile-credits').innerText = currentCredits;
+                    showToast('Reward Claimed! +100 Credits added to your vault.', 'success');
+                    closeModal('earnCreditsModal');
+                } catch (error) { showToast('Error rewarding credits.', 'error'); } 
+                finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-play"></i> Play Video`; }
+            }, 3000);
+        });
+
+        document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+        // --- SOFTWARE DATA (Converted from your HTML) ---
+        const softwareData = [
+            { name: "Adobe Premiere Pro", version: "v2024 | Video Editing", icon: "fa-film", desc: "The industry-leading video editing software. AI-powered tools.", features: ["AI Text-Based Editing", "Auto Tone Mapping", "Win 10/11 (64-bit)"], link: "https://www.mediafire.com/file/prj7cvzu4lqtvym/Adobe_Premiere_Pro_2024_%2528v24.4.1.002%2529_Multilingual.rar/file" },
+            { name: "Adobe Photoshop", version: "v2024 | Image Editing", icon: "fa-image", desc: "Create and enhance photographs, illustrations, and 3D artwork.", features: ["Generative Fill AI", "Neural Filters", "8GB RAM Required"], link: "https://www.mediafire.com/file/iht1wfeg9tokjms/Adobe_Photoshop_2024_%2528v25.9.0.573%2529_Multilingual.rar/file" },
+            { name: "MS Office 2021", version: "Pro Plus | Lifetime", icon: "fa-file-word", desc: "Includes Word, Excel, PowerPoint, and Outlook. No subscription.", features: ["Dark Mode Support", "XLOOKUP in Excel", "Lifetime Activation"], link: "#" },
+            { name: "WinRAR 2024", version: "Compression Tool", icon: "fa-file-zipper", desc: "Powerful archive manager. Compress, encrypt, and backup.", features: ["RAR5 Compression", "AES-256 Encryption", "Fast Extraction"], link: "https://www.win-rar.com/start.html?&L=0" },
+            { name: "Adobe Acrobat Pro", version: "v2024 | PDF Editor", icon: "fa-file-pdf", desc: "The complete PDF solution. Edit, sign, and convert PDFs.", features: ["Edit Text & Images", "Convert to Word/Excel", "E-Signatures"], link: "https://www.mediafire.com/file/h8y8rfepb8w7f8p/Adobe_Acrobat_Pro_2024_%2528v24.2.20895%2529_x64_Multilingual.rar/file" },
+            { name: "Adobe After Effects", version: "v2024 | VFX & Motion", icon: "fa-wand-magic-sparkles", desc: "Create cinematic movie titles, intros, and transitions.", features: ["Roto Brush 2 AI", "3D Transform Gizmos", "16GB RAM Min"], link: "https://www.mediafire.com/file/frwxif8l97e7djs/Adobe_After_Effects_2024_%2528v24.4.1.002%2529_Multilingual.rar/file" },
+            { name: "Adobe Animate", version: "v2024 | 2D Animation", icon: "fa-person-running", desc: "Design interactive vector animations for games and TV.", features: ["Asset Warping", "Character Rigging", "HTML5 Canvas"], link: "https://www.mediafire.com/file/gl88lz264opkekm/Adobe_Animate_2024_%2528v24.0.3.19%2529_Multilingual.rar/file" },
+            { name: "Adobe Audition", version: "v2024 | Audio Editor", icon: "fa-headphones", desc: "Professional audio workstation for mixing and editing.", features: ["Multitrack Editing", "Noise Reduction", "Podcast Tools"], link: "https://www.mediafire.com/file/tzmjf9j207wdacg/Adobe_Audition_2024_%2528v24.4.0.045%2529_Multilingua.rar/file" },
+            { name: "Adobe Illustrator", version: "v2024 | Vector Design", icon: "fa-pen-nib", desc: "Create logos, icons, and illustrations with vector graphics.", features: ["Scalable Vectors", "Text to Vector AI", "Advanced Gradients"], link: "https://www.mediafire.com/file/1ou9zu3771hatyv/Adobe_Illustrator_2024_%2528v28.4.1.86%2529_Multilingual.rar/file" },
+            { name: "CapCut PC", version: "v2024 | Pro Version", icon: "fa-scissors", desc: "All-in-one video editor with trending effects and auto-captions.", features: ["Auto Captions", "Background Remover", "Premium Effects"], link: "https://www.mediafire.com/file/7t3354u95aasyll/CapCut_7_0_0_2843_beta6_capcutpc_beta_creatortool.exe/file" },
+            { name: "Topaz Video AI", version: "v7.1 | Enhancer", icon: "fa-microchip", desc: "Upscale video resolution to 4K/8K and smooth motion with AI.", features: ["Upscale to 8K", "60fps Smoothing", "Requires GPU"], link: "https://www.mediafire.com/file/qjtgoad9rxov4uz/Topaz+Video+AI+Pro+7.1.4+(x64)+%5BFileCR%5D.zip/file" },
+            { name: "Canva Desktop", version: "v1.111 | Design Tool", icon: "fa-object-group", desc: "Graphic design platform for social media and presentations.", features: ["Free Templates", "Drag-and-Drop", "Offline Mode"], link: "https://www.mediafire.com/file/vhdg6rd11hy7j1t/Canva+Setup+1.111.0.zip/file" }
+        ];
+
+        // --- RENDER CARDS ---
+        const container = document.getElementById('software-container');
+        softwareData.forEach((sw, index) => {
+            const delay = index * 0.05;
+            const liElements = sw.features.map(f => `<li class="text-sm opacity-80 mb-1">${f}</li>`).join('');
+            
+            const card = `
+                <div class="software-card" style="animation-delay: ${delay}s;">
+                    <div class="p-6">
+                        <div class="w-14 h-14 rounded-2xl bg-gray-50 dark:bg-gray-800 flex items-center justify-center mb-4 border border-gray-200 dark:border-gray-700">
+                            <i class="fa-solid ${sw.icon} text-2xl text-gold"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-1">${sw.name}</h3>
+                        <p class="text-xs font-bold text-gold uppercase tracking-wider mb-4">${sw.version}</p>
+                        
+                        <button onclick="toggleInfo(this)" class="w-full text-left flex justify-between items-center text-sm font-bold opacity-70 hover:opacity-100 transition py-2">
+                            View Software Details <i class="fa-solid fa-chevron-down transition transform"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="seo-box bg-gray-50 dark:bg-gray-800/50">
+                        <p class="text-sm opacity-80 mb-3 leading-relaxed">${sw.desc}</p>
+                        <p class="text-xs font-bold uppercase tracking-wider opacity-50 mb-2">Key Features</p>
+                        <ul>${liElements}</ul>
+                    </div>
+
+                    <div class="p-4 border-t border-gray-100 dark:border-gray-800 mt-auto bg-gray-50/50 dark:bg-gray-800/20">
+                        <button onclick="handleDownload('${sw.name}', '${sw.link}')" class="w-full btn-gold py-3 rounded-xl font-bold flex justify-center items-center gap-2">
+                            <i class="fa-solid fa-download"></i> Download (1000 CR)
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
+        // Toggle Accordion Info
+        window.toggleInfo = function(btn) {
+            const seoBox = btn.parentElement.nextElementSibling;
+            const icon = btn.querySelector('i');
+            seoBox.classList.toggle('expanded');
+            icon.style.transform = seoBox.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+
+        // --- THE DOWNLOAD & CREDIT DEDUCTION ENGINE ---
+        window.handleDownload = async function(softwareName, link) {
+            const cost = 1000;
+            
+            // Check if user has enough credits
+            if (currentCredits >= cost) {
+                try {
+                    // Deduct Credits
+                    const newBalance = currentCredits - cost;
+                    await updateDoc(currentUserDocRef, { credits: newBalance });
+                    
+                    // Update Local UI
+                    currentCredits = newBalance;
+                    document.getElementById('user-credits').innerText = currentCredits;
+                    document.getElementById('mobile-credits').innerText = currentCredits;
+                    
+                    // Show Success
+                    showToast(`✅ Payment Successful! Downloading ${softwareName}...`, 'success');
+                    
+                    // Open Download Link
+                    setTimeout(() => {
+                        window.open(link, '_blank');
+                    }, 1500);
+
+                } catch (error) {
+                    showToast('❌ Error processing transaction. Please try again.', 'error');
+                }
+            } else {
+                // Not enough credits
+                showToast(`❌ Insufficient Credits. You need ${cost} CR to unlock this. Please watch ads to earn more.`, 'error');
+                
+                // Automatically open Earn Credits modal after 2 seconds
+                setTimeout(() => {
+                    openModal('earnCreditsModal');
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>
